@@ -22,10 +22,6 @@ void Game::onEvent(sf::Event &evt) {
       log("Closed");
       exit();
       break;
-    case sf::Event::MouseMoved:
-      log("MouseMoved");
-      onMouseMoved(evt);
-      break;
     case sf::Event::KeyReleased:
       log("KeyReleased");
       onKeyReleased(evt);
@@ -79,10 +75,6 @@ void Game::paint() {
   paintDebug();
 #endif
   cursor->paint();
-}
-
-void Game::onMouseMoved(sf::Event &evt) {
-  cursor->onMoved(evt.MouseMove);
 }
 
 void Game::onKeyReleased(sf::Event &evt) {

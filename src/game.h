@@ -18,7 +18,6 @@ class Game {
     void paint();
 
     void onEvent(sf::Event&);
-    void onMouseMoved(sf::Event&);
     void onKeyReleased(sf::Event&);
 
     bool running;

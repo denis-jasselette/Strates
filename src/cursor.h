@@ -8,12 +8,12 @@ class Cursor {
   public:
     Cursor(sf::RenderWindow*, ImageManager*);
     ~Cursor();
-    void onMoved(const sf::Event::MouseMoveEvent&);
     sf::Vector2i getPosition();
     sf::Vector2f getViewPosition();
     void paint();
 
   private:
+    void refreshPosition();
     void centerCursor();
 
     sf::RenderWindow *window;

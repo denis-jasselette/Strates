@@ -18,8 +18,7 @@ Cursor::~Cursor() {
 
 void Cursor::centerCursor() {
   sf::Vector2i center(window->GetWidth() / 2, window->GetHeight() / 2);
-  if (center != sf::Mouse::GetPosition(*window))
-    sf::Mouse::SetPosition(center, *window);
+  sf::Mouse::SetPosition(center, *window);
 }
 
 float clamp(float v, float min, float max) {
@@ -28,8 +27,8 @@ float clamp(float v, float min, float max) {
   return (v > max)? max : v;
 }
 
-void Cursor::onMoved(const sf::Event::MouseMoveEvent &move) {
-  sf::Vector2i mouse = sf::Vector2i(move.X, move.Y);
+void Cursor::refreshPosition() {
+  sf::Vector2i mouse = sf::Mouse::GetPosition(*window);
   int w = window->GetWidth();
   int h = window->GetHeight();
 
@@ -49,6 +48,7 @@ sf::Vector2f Cursor::getViewPosition() {
 }
 
 void Cursor::paint() {
+  refreshPosition();
   sf::Vector2f viewPos = getViewPosition();
   sprite->SetPosition(viewPos.x, viewPos.y);
   window->Draw(*sprite);
