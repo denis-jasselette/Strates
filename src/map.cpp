@@ -57,9 +57,19 @@ Map *Map::fromFile(std::string filename, ImageManager *imgMgr) {
     }
   }
 
-  log("Huge success");
+  log("Map correctly loaded");
 
 fail:
   mapFile.close();
   return res;
+}
+
+void Map::paint(sf::RenderTarget *target) {
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      sf::Sprite *sprite = tileMap->get(tiles[i][j]);
+      sprite->SetPosition((sf::Vector2f)tileMap->convertCoords(j, i));
+      target->Draw(*sprite);
+    }
+  }
 }

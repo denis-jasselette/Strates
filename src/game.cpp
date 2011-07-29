@@ -1,7 +1,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "config.h"
 #include "game.h"
-#include "map.h"
 
 Game::Game() {
   window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "Tiled Map");
@@ -9,7 +8,7 @@ Game::Game() {
 
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
-  Map::fromFile(res_path("map"), imageMgr);
+  map = Map::fromFile(res_path("map"), imageMgr);
 }
 
 Game::~Game() {
@@ -75,6 +74,7 @@ void Game::paintDebug() {
 
 void Game::paint() {
   window->Clear(sf::Color::Black);
+  map->paint(window);
 #if DEBUG
   paintDebug();
 #endif

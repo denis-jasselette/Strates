@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "imageManager.h"
 #include "cursor.h"
+#include "map.h"
 
 class Game {
   public:
@@ -24,6 +25,7 @@ class Game {
     sf::RenderWindow *window;
     Cursor *cursor;
     ImageManager *imageMgr;
+    Map *map;
 };
 
 #endif	/* _GAME_H_ */
