@@ -14,6 +14,8 @@ class Game {
     void exit();
 
   private:
+    void select();
+
     void paintDebug();
     void paint();
 

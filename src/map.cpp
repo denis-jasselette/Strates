@@ -68,8 +68,27 @@ void Map::paint(sf::RenderTarget *target) {
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       sf::Sprite *sprite = tileMap->get(tiles[i][j]);
-      sprite->SetPosition((sf::Vector2f)tileMap->convertCoords(j, i));
+      sf::Vector2i mapCoords(j, i);
+      sprite->SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
       target->Draw(*sprite);
     }
   }
+}
+
+sf::Vector2i Map::viewToMapCoords(sf::Vector2i &coords) {
+  int w = tileMap->getTileWidth();
+  int h = tileMap->getTileHeight();
+  return sf::Vector2i(coords.x / w, coords.y / h);
+}
+
+sf::Vector2i Map::mapToViewCoords(sf::Vector2i &coords) {
+  int w = tileMap->getTileWidth();
+  int h = tileMap->getTileHeight();
+  return sf::Vector2i(coords.x * w, coords.y * h);
+}
+
+sf::IntRect Map::mapToViewRect(sf::Vector2i &coords) {
+  int w = tileMap->getTileWidth();
+  int h = tileMap->getTileHeight();
+  return sf::IntRect(coords.x * w, coords.y * h, w, h);
 }

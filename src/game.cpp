@@ -68,9 +68,19 @@ void Game::paintDebug() {
   window->Draw(out);
 }
 
+void Game::select() {
+  sf::Vector2i curPos = (sf::Vector2i) cursor->getViewPosition();
+  sf::Vector2i mapPos = map->viewToMapCoords(curPos);
+  sf::IntRect rect = map->mapToViewRect(mapPos);
+  sf::Shape selection = sf::Shape::Rectangle(rect.Left + 1, rect.Top + 1, rect.Width - 2, rect.Height - 2, sf::Color::White, 1, sf::Color::Green);
+  selection.EnableFill(false);
+  window->Draw(selection);
+}
+
 void Game::paint() {
   window->Clear(sf::Color::Black);
   map->paint(window);
+  select();
 #if DEBUG
   paintDebug();
 #endif

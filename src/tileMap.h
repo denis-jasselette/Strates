@@ -12,7 +12,8 @@ class TileMap {
     ~TileMap();
 
     sf::Sprite *get(int);
-    sf::Vector2i convertCoords(int, int);
+    int getTileWidth();
+    int getTileHeight();
 
   private:
     std::string name;

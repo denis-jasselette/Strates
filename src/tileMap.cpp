@@ -23,6 +23,5 @@ sf::Sprite *TileMap::get(int type) {
   return sprite;
 }
 
-sf::Vector2i TileMap::convertCoords(int x, int y) {
-  return sf::Vector2i(x * tileWidth, y * tileHeight);
-}
+int TileMap::getTileWidth() { return tileWidth; }
+int TileMap::getTileHeight() { return tileHeight; }

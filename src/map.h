@@ -12,6 +12,9 @@ class Map {
     ~Map();
 
     void paint(sf::RenderTarget *target);
+    sf::Vector2i viewToMapCoords(sf::Vector2i &coords);
+    sf::Vector2i mapToViewCoords(sf::Vector2i &coords);
+    sf::IntRect mapToViewRect(sf::Vector2i &coords);
   private:
     int width, height;
     int **tiles;
