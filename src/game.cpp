@@ -27,12 +27,13 @@ void Game::onEvent(sf::Event &evt) {
       onKeyReleased(evt);
       break;
     default:
-      log("Unhandled");
       break;
   }
 }
 
 void Game::run() {
+  window->EnableVerticalSync(true);
+  window->SetFramerateLimit(60);
   window->EnableKeyRepeat(false);
   running = true;
   while (running) {
@@ -61,7 +62,8 @@ void Game::paintDebug() {
 
   std::ostringstream s;
   sf::Vector2i cur = cursor->getPosition();
-  s << "Cursor: " << cur.x << ", " << cur.y;
+  s << "FPS: " << 1000. / window->GetFrameTime() << std::endl
+    << "Cursor: " << cur.x << ", " << cur.y;
   out.SetString(s.str());
 
   out.SetPosition(window->ConvertCoords(0, 0));
