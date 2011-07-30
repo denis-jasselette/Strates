@@ -20,6 +20,8 @@ class Map {
     int width, height;
     int **tiles;
     TileMap *tileMap;
+    sf::IntRect renderedRect;
+    sf::RenderImage *render;
 
     Map(int width, int height, TileMap *tileMap);
     void paint(sf::RenderTarget *target, sf::IntRect &paintRect);

@@ -9,9 +9,13 @@ Map::Map(int width, int height, TileMap *tileMap) {
   tiles = new int*[height];
   for (int i = 0; i < height; i++)
     tiles[i] = new int[width];
+
+  renderedRect = sf::IntRect(0, 0, 0, 0);
+  render = new sf::RenderImage();
 }
 
 Map::~Map() {
+  delete render;
   delete tileMap;
   for (int i = 0; i < height; i++)
     delete[] tiles[i];
@@ -64,16 +68,39 @@ fail:
   return res;
 }
 
+/* FIXME */
+static bool rectEqual(sf::IntRect &a, sf::IntRect &b) {
+  return a.Left == b.Left
+    && a.Top == b.Top
+    && a.Width == b.Width
+    && a.Height == b.Height;
+}
+
 void Map::paint(sf::RenderTarget *target) {
   sf::IntRect targetRect = target->GetViewport(target->GetView());
   sf::IntRect paintRect = viewToMapRect(targetRect);
-  paint(target, paintRect);
+  if (!rectEqual(renderedRect, paintRect)) {
+    if (renderedRect.Width != paintRect.Width
+        || renderedRect.Height != paintRect.Height)
+    {
+      render->Create(paintRect.Width * tileMap->getTileWidth(),
+          paintRect.Height * tileMap->getTileHeight());
+    }
+    paint(render, paintRect);
+    renderedRect = paintRect;
+    render->Display();
+  }
+
+  sf::Sprite sprite(render->GetImage());
+  sf::Vector2i mapCoords(paintRect.Left, paintRect.Top);
+  sprite.SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
+  target->Draw(sprite);
 }
 
 void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
   for (int i = 0; i < paintRect.Height && i < height; i++) {
     for (int j = 0; j < paintRect.Width && j < width; j++) {
-      sf::Vector2i mapCoords(j + paintRect.Left, i + paintRect.Top);
+      sf::Vector2i mapCoords(j, i);
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);
       sprite->SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
       target->Draw(*sprite);
