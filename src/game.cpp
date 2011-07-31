@@ -1,6 +1,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "config.h"
 #include "game.h"
+#include "utils.h"
 
 Game::Game() {
   window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "Tiled Map");
@@ -53,6 +54,24 @@ void Game::run() {
 void Game::exit() {
   running = false;
   window->Close();
+}
+
+void Game::update() {
+  int scrollSpeed = 5;
+  sf::View view = window->GetView();
+  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Left))
+    view.Move(-scrollSpeed, 0);
+  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Right))
+    view.Move(scrollSpeed, 0);
+  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Up))
+    view.Move(0, -scrollSpeed);
+  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Down))
+    view.Move(0, scrollSpeed);
+
+  sf::IntRect rect = viewGetRect(view);
+  rect = map->clampViewRect(rect);
+  viewSetRect(view, rect);
+  window->SetView(view);
 }
 
 void Game::paintDebug() {

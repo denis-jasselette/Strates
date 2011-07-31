@@ -19,6 +19,8 @@ class Game {
     void paintDebug();
     void paint();
 
+    void update();
+
     void onEvent(sf::Event&);
     void onKeyReleased(sf::Event&);
 

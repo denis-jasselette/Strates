@@ -1,4 +1,5 @@
 #include "cursor.h"
+#include "utils.h"
 
 Cursor::Cursor(sf::RenderWindow *window, ImageManager *imageMgr) {
   this->window = window;
@@ -19,12 +20,6 @@ Cursor::~Cursor() {
 void Cursor::centerCursor() {
   sf::Vector2i center(window->GetWidth() / 2, window->GetHeight() / 2);
   sf::Mouse::SetPosition(center, *window);
-}
-
-float clamp(float v, float min, float max) {
-  if (v < min)
-    return min;
-  return (v > max)? max : v;
 }
 
 void Cursor::refreshPosition() {

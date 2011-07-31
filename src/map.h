@@ -12,6 +12,7 @@ class Map {
     ~Map();
 
     void paint(sf::RenderTarget *target);
+    sf::IntRect clampViewRect(const sf::IntRect &rect);
     sf::Vector2i viewToMapCoords(sf::Vector2i &coords);
     sf::IntRect viewToMapRect(sf::IntRect &viewRect);
     sf::Vector2i mapToViewCoords(sf::Vector2i &coords);
@@ -20,6 +21,8 @@ class Map {
     int width, height;
     int **tiles;
     TileMap *tileMap;
+    sf::Vector2i viewSize;
+    sf::IntRect viewRect;
     sf::IntRect renderedRect;
     sf::RenderImage *render;
 

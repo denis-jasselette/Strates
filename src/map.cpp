@@ -1,10 +1,15 @@
 #include <fstream>
 #include "map.h"
+#include "utils.h"
 
 Map::Map(int width, int height, TileMap *tileMap) {
   this->width = width;
   this->height = height;
   this->tileMap = tileMap;
+  viewSize = sf::Vector2i(
+      width * tileMap->getTileWidth(),
+      height * tileMap->getTileHeight());
+  viewRect = sf::IntRect(sf::Vector2i(0, 0), viewSize);
 
   tiles = new int*[height];
   for (int i = 0; i < height; i++)
@@ -81,7 +86,8 @@ static bool rectEqual(sf::IntRect &a, sf::IntRect &b) {
 }
 
 void Map::paint(sf::RenderTarget *target) {
-  sf::IntRect targetRect = target->GetViewport(target->GetView());
+  sf::View targetView = target->GetView();
+  sf::IntRect targetRect = viewGetRect(targetView);
   sf::IntRect paintRect = viewToMapRect(targetRect);
 
 #if CACHE_RENDER
@@ -107,14 +113,26 @@ void Map::paint(sf::RenderTarget *target) {
 }
 
 void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
-  for (int i = 0; i < paintRect.Height && i < height; i++) {
-    for (int j = 0; j < paintRect.Width && j < width; j++) {
-      sf::Vector2i mapCoords(j, i);
+  for (int i = 0; i < paintRect.Height; i++) {
+    for (int j = 0; j < paintRect.Width; j++) {
+      sf::Vector2i mapCoords(j + paintRect.Left, i + paintRect.Top);
+      if (mapCoords.x >= width || mapCoords.y >= height)
+        continue;
+
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);
       sprite->SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
       target->Draw(*sprite);
     }
   }
+}
+
+sf::IntRect Map::clampViewRect(const sf::IntRect &rect) {
+  sf::IntRect clamped = rect;
+  clamped.Width = std::min(rect.Width, viewRect.Width);
+  clamped.Height = std::min(rect.Height, viewRect.Height);
+  clamped.Left = clamp(rect.Left, viewRect.Left, viewRect.Left + viewRect.Width - rect.Width);
+  clamped.Top = clamp(rect.Top, viewRect.Top, viewRect.Top + viewRect.Height - rect.Height);
+  return clamped;
 }
 
 sf::Vector2i Map::viewToMapCoords(sf::Vector2i &coords) {
@@ -123,13 +141,15 @@ sf::Vector2i Map::viewToMapCoords(sf::Vector2i &coords) {
   return sf::Vector2i(coords.x / w, coords.y / h);
 }
 
-sf::IntRect Map::viewToMapRect(sf::IntRect &viewRect) {
+sf::IntRect Map::viewToMapRect(sf::IntRect &view) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
-  int left = viewRect.Left / w;
-  int top = viewRect.Top / h;
-  int width = (viewRect.Width - 1) / w + 1;
-  int height = (viewRect.Height - 1) / h + 1;
+  int left = view.Left / w;
+  int top = view.Top / h;
+  int right = (view.Left + view.Width - 1) / w;
+  int bottom = (view.Top + view.Height - 1) / h;
+  int width = right - left + 1;
+  int height = bottom - top + 1;
   return sf::IntRect(left, top, width, height);
 }
 
