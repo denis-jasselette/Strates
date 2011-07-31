@@ -33,7 +33,7 @@ void Game::onEvent(sf::Event &evt) {
 
 void Game::run() {
   window->EnableVerticalSync(true);
-  window->SetFramerateLimit(60);
+  window->SetFramerateLimit(FRAMERATE_LIMIT);
   window->EnableKeyRepeat(false);
   running = true;
   while (running) {

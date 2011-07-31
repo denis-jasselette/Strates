@@ -10,8 +10,12 @@ Map::Map(int width, int height, TileMap *tileMap) {
   for (int i = 0; i < height; i++)
     tiles[i] = new int[width];
 
+#if CACHE_RENDER
   renderedRect = sf::IntRect(0, 0, 0, 0);
   render = new sf::RenderImage();
+#else
+  render = NULL;
+#endif
 }
 
 Map::~Map() {
@@ -79,6 +83,8 @@ static bool rectEqual(sf::IntRect &a, sf::IntRect &b) {
 void Map::paint(sf::RenderTarget *target) {
   sf::IntRect targetRect = target->GetViewport(target->GetView());
   sf::IntRect paintRect = viewToMapRect(targetRect);
+
+#if CACHE_RENDER
   if (!rectEqual(renderedRect, paintRect)) {
     if (renderedRect.Width != paintRect.Width
         || renderedRect.Height != paintRect.Height)
@@ -95,6 +101,9 @@ void Map::paint(sf::RenderTarget *target) {
   sf::Vector2i mapCoords(paintRect.Left, paintRect.Top);
   sprite.SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
   target->Draw(sprite);
+#else
+  paint(target, paintRect);
+#endif
 }
 
 void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
