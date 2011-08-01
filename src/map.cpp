@@ -2,7 +2,15 @@
 #include "map.h"
 #include "utils.h"
 
+Map::Map(const Map &map, TileMap *tileMap) {
+  init(map.width, map.height, tileMap);
+}
+
 Map::Map(int width, int height, TileMap *tileMap) {
+  init(width, height, tileMap);
+}
+
+void Map::init(int width, int height, TileMap *tileMap) {
   this->width = width;
   this->height = height;
   this->tileMap = tileMap;

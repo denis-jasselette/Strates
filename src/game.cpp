@@ -10,11 +10,14 @@ Game::Game() {
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
   map = Map::fromFile(res_path("map"), imageMgr);
+  fog = new FoW(map, imageMgr);
 }
 
 Game::~Game() {
   delete cursor;
   delete imageMgr;
+  delete map;
+  delete fog;
 }
 
 void Game::onEvent(sf::Event &evt) {
@@ -26,6 +29,10 @@ void Game::onEvent(sf::Event &evt) {
     case sf::Event::KeyReleased:
       log("KeyReleased");
       onKeyReleased(evt);
+      break;
+    case sf::Event::MouseButtonPressed:
+      log("MouseButtonPressed");
+      onMouseButtonPressed(evt);
       break;
     default:
       break;
@@ -101,6 +108,7 @@ void Game::select() {
 void Game::paint() {
   window->Clear(sf::Color::Black);
   map->paint(window);
+  fog->paint(window);
   select();
 #if DEBUG
   paintDebug();
@@ -113,6 +121,20 @@ void Game::onKeyReleased(sf::Event &evt) {
     case sf::Keyboard::Escape:
     case sf::Keyboard::Q:
       exit();
+      break;
+    default:
+      break;
+  }
+}
+
+void Game::onMouseButtonPressed(sf::Event &evt) {
+  sf::Vector2i coords = cursor->getPosition();
+  switch (evt.MouseButton.Button) {
+    case sf::Mouse::Left:
+      fog->set(map->viewToMapCoords(coords), FoW::REVEALED);
+      break;
+    case sf::Mouse::Right:
+      fog->set(map->viewToMapCoords(coords), FoW::HIDDEN);
       break;
     default:
       break;

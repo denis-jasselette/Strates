@@ -5,6 +5,7 @@
 #include "imageManager.h"
 #include "cursor.h"
 #include "map.h"
+#include "fow.h"
 
 class Game {
   public:
@@ -23,12 +24,14 @@ class Game {
 
     void onEvent(sf::Event&);
     void onKeyReleased(sf::Event&);
+    void onMouseButtonPressed(sf::Event&);
 
     bool running;
     sf::RenderWindow *window;
     Cursor *cursor;
     ImageManager *imageMgr;
     Map *map;
+    FoW *fog;
 };
 
 #endif	/* _GAME_H_ */
