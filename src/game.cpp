@@ -53,6 +53,7 @@ void Game::run() {
     if (!running)
       break;
 
+    update();
     paint();
     window->Display();
   }
@@ -128,7 +129,7 @@ void Game::onKeyReleased(sf::Event &evt) {
 }
 
 void Game::onMouseButtonPressed(sf::Event &evt) {
-  sf::Vector2i coords = cursor->getPosition();
+  sf::Vector2i coords = (sf::Vector2i) cursor->getViewPosition();
   switch (evt.MouseButton.Button) {
     case sf::Mouse::Left:
       fog->set(map->viewToMapCoords(coords), FoW::REVEALED);
