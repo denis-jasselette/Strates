@@ -19,7 +19,7 @@ class TileMap {
     std::string name;
     sf::Image *src;
     sf::Sprite *sprite;
-    int tileWidth, tileHeight, origin;
+    int tileWidth, tileHeight;
     int rows, cols;
 };
 
