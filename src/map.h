@@ -17,6 +17,7 @@ class Map {
     sf::IntRect viewToMapRect(sf::IntRect &viewRect);
     sf::Vector2i mapToViewCoords(sf::Vector2i &coords);
     sf::IntRect mapToViewRect(sf::Vector2i &coords);
+    bool contains(int x, int y);
   protected:
     int width, height;
     int **tiles;

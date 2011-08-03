@@ -172,3 +172,7 @@ sf::IntRect Map::mapToViewRect(sf::Vector2i &coords) {
   int h = tileMap->getTileHeight();
   return sf::IntRect(coords.x * w, coords.y * h, w, h);
 }
+
+bool Map::contains(int x, int y) {
+  return x >= 0 && x < width && y >= 0 && y < height;
+}

@@ -12,27 +12,32 @@ class FoW : public Map {
     };
 
     enum TileIndex {
-      SOUTH = 1,
-      SE    = 1 << 1,
-      EAST  = 1 << 2,
-      NE    = 1 << 3,
-      NORTH = 1 << 4,
-      NW    = 1 << 5,
-      WEST  = 1 << 6,
-      SW    = 1 << 7,
-      ALL   = (1 << 8) - 1,
-      NONE  = 1 << 8
+      S,
+      E,
+      N,
+      W,
+      SW,
+      SE,
+      NE,
+      NW,
+      SSE,
+      NNE,
+      NNW,
+      SSW,
+      ALL,
+      NONE
     };
 
     FoW(Map *map, ImageManager *imgMgr);
     ~FoW();
 
-    TileIndex getOpposite(TileIndex);
     void set(int x, int y, FogStatus value);
     void set(const sf::Vector2i &coords, FogStatus value);
   private:
     Map *map;
     FogStatus **status;
+
+    void updateNeighbours(int x, int y);
 };
 
 #endif /* _FOW_H_ */
