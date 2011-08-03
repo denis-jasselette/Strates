@@ -13,7 +13,7 @@ FoW::FoW(Map *map, ImageManager *imgMgr) :
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       status[i][j] = HIDDEN;
-      tiles[i][j] = SOUTH | EAST | NORTH | WEST;
+      tiles[i][j] = ALL;
     }
   }
 }
@@ -24,17 +24,27 @@ FoW::~FoW() {
   delete[] status;
 }
 
+FoW::TileIndex FoW::getOpposite(TileIndex index) {
+  if (index < NORTH)
+    return (FoW::TileIndex) (index << 4);
+  return (FoW::TileIndex) (index >> 4);
+}
+
 void FoW::set(int x, int y, FogStatus value) {
   struct neighbour_t {
     int i, j;
-    TileIndex rmIndex, addIndex;
+    TileIndex rmIndex;
   };
 
   static const neighbour_t neighbours[] = {
-    { -1, 0, SOUTH, NORTH },
-    { 0, -1, EAST, WEST },
-    { 1, 0, NORTH, SOUTH },
-    { 0, 1, WEST, EAST }
+    { -1,  0, SOUTH },
+    { -1, -1, SE },
+    {  0, -1, EAST },
+    {  1, -1, NE },
+    {  1,  0, NORTH },
+    {  1,  1, NW },
+    {  0,  1, WEST },
+    { -1,  1, SW },
   };
 
   if (status[y][x] == value)
@@ -57,7 +67,7 @@ void FoW::set(int x, int y, FogStatus value) {
       tiles[y + n.i][x + n.j] &= ~n.rmIndex;
     else if (status[y + n.i][x + n.j] == HIDDEN) {
       tiles[y + n.i][x + n.j] |= n.rmIndex;
-      tiles[y][x] |= n.addIndex;
+      tiles[y][x] |= getOpposite(n.rmIndex);
     }
   }
 }
