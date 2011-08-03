@@ -33,7 +33,7 @@ void FoW::set(int x, int y, FogStatus value) {
   if (value == REVEALED)
     tiles[y][x] = NONE;
   else
-    tiles[y][x] = ALL;
+    updateTile(x, y);
 
   updateNeighbours(x, y);
 }
@@ -97,23 +97,24 @@ static const int test[256] = {
 };
 
 void FoW::updateNeighbours(int x, int y) {
+  for (size_t i = 0; i < neighbours_len; i++)
+    updateTile(x + neighbours[i].j, y + neighbours[i].i);
+}
+
+void FoW::updateTile(int x, int y) {
   const neighbour_t *n = neighbours; // for shortness
-  for (size_t i = 0; i < neighbours_len; i++) {
-    if (!contains(x + n[i].j, y + n[i].i))
-      continue;
-    if (status[y + n[i].i][x + n[i].j] == REVEALED)
-      continue;
+  if (!contains(x, y) || status[y][x] == REVEALED)
+    return;
 
-    int index = 0;
-    for (ssize_t j = neighbours_len - 1; j >= 0; j--) {
-      int bit;
-      if (contains(x + n[i].j + n[j].j, y + n[i].i + n[j].i))
-        bit = (status[y + n[i].i + n[j].i][x + n[i].j + n[j].j] == REVEALED);
-      else
-        bit = 0;
-      index = index * 2 + bit;
-    }
-
-    tiles[y + n[i].i][x + n[i].j] = test[index];
+  int index = 0;
+  for (ssize_t i = neighbours_len - 1; i >= 0; i--) {
+    int bit;
+    if (contains(x + n[i].j, y + n[i].i))
+      bit = (status[y + n[i].i][x + n[i].j] == REVEALED);
+    else
+      bit = 0;
+    index = index * 2 + bit;
   }
+
+  tiles[y][x] = test[index];
 }

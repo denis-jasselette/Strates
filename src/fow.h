@@ -38,6 +38,7 @@ class FoW : public Map {
     FogStatus **status;
 
     void updateNeighbours(int x, int y);
+    void updateTile(int x, int y);
 };
 
 #endif /* _FOW_H_ */
