@@ -16,6 +16,8 @@ class Game {
     void exit();
 
   private:
+    void toggleFullscreen();
+
     void select();
 
     void paintDebug();
@@ -28,7 +30,7 @@ class Game {
     void onMouseWheelMoved(sf::Event&);
     void onMouseButtonPressed(sf::Event&);
 
-    bool running;
+    bool running, isFullscreen;
     sf::RenderWindow *window;
     Cursor *cursor;
     int radius;

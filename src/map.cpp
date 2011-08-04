@@ -130,7 +130,7 @@ void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
   for (int i = 0; i < paintRect.Height; i++) {
     for (int j = 0; j < paintRect.Width; j++) {
       sf::Vector2i mapCoords(j + paintRect.Left, i + paintRect.Top);
-      if (mapCoords.x >= width || mapCoords.y >= height)
+      if (!contains(mapCoords.x, mapCoords.y))
         continue;
 
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);

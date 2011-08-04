@@ -9,7 +9,6 @@ Cursor::Cursor(sf::RenderWindow *window, ImageManager *imageMgr) {
   sprite = new sf::Sprite(*image);
 
   position = sf::Vector2i(window->GetWidth() / 2, window->GetHeight() / 2);
-  window->ShowMouseCursor(false);
   centerCursor();
 }
 

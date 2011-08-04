@@ -4,8 +4,9 @@
 #include "utils.h"
 
 Game::Game() {
-  window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "Tiled Map");
-  window->SetPosition(0, 0);
+  window = new sf::RenderWindow();
+  isFullscreen = false; // changed to true by toggleFullscreen
+  toggleFullscreen();
 
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
@@ -134,11 +135,28 @@ void Game::paint() {
   cursor->paint();
 }
 
+void Game::toggleFullscreen() {
+  std::string title = "Strates";
+  if (!isFullscreen) {
+    sf::VideoMode mode = sf::VideoMode::GetFullscreenModes()[0];
+    window->Create(mode, title, sf::Style::Fullscreen);
+  }
+  else {
+    sf::VideoMode mode = sf::VideoMode::GetDesktopMode();
+    window->Create(sf::VideoMode(800, 600, mode.BitsPerPixel), title);
+  }
+  window->ShowMouseCursor(false);
+  isFullscreen = !isFullscreen;
+}
+
 void Game::onKeyReleased(sf::Event &evt) {
   switch (evt.Key.Code) {
     case sf::Keyboard::Escape:
     case sf::Keyboard::Q:
       exit();
+      break;
+    case sf::Keyboard::F10:
+      toggleFullscreen();
       break;
     default:
       break;
