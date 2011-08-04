@@ -21,6 +21,7 @@ class Map {
   protected:
     int width, height;
     int **tiles;
+    bool deleteTileMap;
     TileMap *tileMap;
     sf::Vector2i viewSize;
     sf::IntRect viewRect;

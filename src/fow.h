@@ -7,6 +7,11 @@
 
 class FoW : public Map {
   public:
+    enum FogType {
+      DARK = 0,
+      LIGHT = 16
+    };
+
     enum FogStatus {
       HIDDEN, REVEALED
     };
@@ -28,7 +33,7 @@ class FoW : public Map {
       NONE
     };
 
-    FoW(Map *map, ImageManager *imgMgr);
+    FoW(Map *map, TileMap *tileMap, FogType type = DARK);
     ~FoW();
 
     void set(int x, int y, FogStatus value);
@@ -36,6 +41,7 @@ class FoW : public Map {
   private:
     Map *map;
     FogStatus **status;
+    int origin;
 
     void updateNeighbours(int x, int y);
     void updateTile(int x, int y);

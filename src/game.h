@@ -5,6 +5,7 @@
 #include "imageManager.h"
 #include "cursor.h"
 #include "map.h"
+#include "tileMap.h"
 #include "fow.h"
 
 class Game {
@@ -31,7 +32,8 @@ class Game {
     Cursor *cursor;
     ImageManager *imageMgr;
     Map *map;
-    FoW *fog;
+    TileMap *fogTileMap;
+    FoW *fog, *foglight;
 };
 
 #endif	/* _GAME_H_ */

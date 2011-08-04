@@ -1,9 +1,10 @@
 #include "fow.h"
 
-FoW::FoW(Map *map, ImageManager *imgMgr) :
-  Map(*map, new TileMap("fow", imgMgr))
+FoW::FoW(Map *map, TileMap *tileMap, FogType type) :
+  Map(*map, tileMap)
 {
   this->map = map;
+  origin = type;
 
   status = new FogStatus*[height];
   for (int i = 0; i < height; i++) {
@@ -13,7 +14,7 @@ FoW::FoW(Map *map, ImageManager *imgMgr) :
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       status[i][j] = HIDDEN;
-      tiles[i][j] = ALL;
+      tiles[i][j] = ALL + origin;
     }
   }
 }
@@ -31,7 +32,7 @@ void FoW::set(int x, int y, FogStatus value) {
   status[y][x] = value;
 
   if (value == REVEALED)
-    tiles[y][x] = NONE;
+    tiles[y][x] = NONE + origin;
   else
     updateTile(x, y);
 
@@ -116,5 +117,5 @@ void FoW::updateTile(int x, int y) {
     index = index * 2 + bit;
   }
 
-  tiles[y][x] = test[index];
+  tiles[y][x] = test[index] + origin;
 }

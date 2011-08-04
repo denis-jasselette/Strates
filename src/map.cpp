@@ -14,6 +14,7 @@ void Map::init(int width, int height, TileMap *tileMap) {
   this->width = width;
   this->height = height;
   this->tileMap = tileMap;
+  deleteTileMap = false;
   viewSize = sf::Vector2i(
       width * tileMap->getTileWidth(),
       height * tileMap->getTileHeight());
@@ -32,8 +33,11 @@ void Map::init(int width, int height, TileMap *tileMap) {
 }
 
 Map::~Map() {
+#if CACHE_RENDER
   delete render;
-  delete tileMap;
+#endif
+  if (deleteTileMap)
+    delete tileMap;
   for (int i = 0; i < height; i++)
     delete[] tiles[i];
   delete[] tiles;
@@ -67,6 +71,8 @@ Map *Map::fromFile(std::string filename, ImageManager *imgMgr) {
     delete tileMap;
     goto fail;
   }
+
+  res->deleteTileMap = true;
 
   /* fill res->tiles */
   for (int i = 0; i < height; i++) {

@@ -10,7 +10,10 @@ Game::Game() {
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
   map = Map::fromFile(res_path("map"), imageMgr);
-  fog = new FoW(map, imageMgr);
+
+  fogTileMap = new TileMap("fow", imageMgr);
+  fog = new FoW(map, fogTileMap);
+  foglight = new FoW(map, fogTileMap, FoW::LIGHT);
 }
 
 Game::~Game() {
@@ -18,6 +21,8 @@ Game::~Game() {
   delete imageMgr;
   delete map;
   delete fog;
+  delete foglight;
+  delete fogTileMap;
 }
 
 void Game::onEvent(sf::Event &evt) {
@@ -109,6 +114,7 @@ void Game::select() {
 void Game::paint() {
   window->Clear(sf::Color::Black);
   map->paint(window);
+  foglight->paint(window);
   fog->paint(window);
   select();
 #if DEBUG
@@ -133,9 +139,10 @@ void Game::onMouseButtonPressed(sf::Event &evt) {
   switch (evt.MouseButton.Button) {
     case sf::Mouse::Left:
       fog->set(map->viewToMapCoords(coords), FoW::REVEALED);
+      foglight->set(map->viewToMapCoords(coords), FoW::REVEALED);
       break;
     case sf::Mouse::Right:
-      fog->set(map->viewToMapCoords(coords), FoW::HIDDEN);
+      foglight->set(map->viewToMapCoords(coords), FoW::HIDDEN);
       break;
     default:
       break;
