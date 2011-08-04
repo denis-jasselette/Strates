@@ -9,6 +9,7 @@ Game::Game() {
 
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
+  radius = 3;
   map = Map::fromFile(res_path("map"), imageMgr);
 
   fogTileMap = new TileMap("fow", imageMgr);
@@ -34,6 +35,10 @@ void Game::onEvent(sf::Event &evt) {
     case sf::Event::KeyReleased:
       log("KeyReleased");
       onKeyReleased(evt);
+      break;
+    case sf::Event::MouseWheelMoved:
+      log("MouseWheelMoved");
+      onMouseWheelMoved(evt);
       break;
     case sf::Event::MouseButtonPressed:
       log("MouseButtonPressed");
@@ -85,6 +90,11 @@ void Game::update() {
   rect = map->clampViewRect(rect);
   viewSetRect(view, rect);
   window->SetView(view);
+
+  foglight->reset();
+  sf::Vector2i coords = (sf::Vector2i) cursor->getViewPosition();
+  fog->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
+  foglight->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
 }
 
 void Game::paintDebug() {
@@ -95,7 +105,8 @@ void Game::paintDebug() {
   std::ostringstream s;
   sf::Vector2i cur = cursor->getPosition();
   s << "FPS: " << 1000. / window->GetFrameTime() << std::endl
-    << "Cursor: " << cur.x << ", " << cur.y;
+    << "Cursor: " << cur.x << ", " << cur.y << std::endl
+    << "Radius: " << radius;
   out.SetString(s.str());
 
   out.SetPosition(window->ConvertCoords(0, 0));
@@ -134,15 +145,17 @@ void Game::onKeyReleased(sf::Event &evt) {
   }
 }
 
+void Game::onMouseWheelMoved(sf::Event &evt) {
+  radius += evt.MouseWheel.Delta;
+  radius = clamp(radius, 0, 10);
+}
+
 void Game::onMouseButtonPressed(sf::Event &evt) {
   sf::Vector2i coords = (sf::Vector2i) cursor->getViewPosition();
   switch (evt.MouseButton.Button) {
     case sf::Mouse::Left:
-      fog->set(map->viewToMapCoords(coords), FoW::REVEALED);
-      foglight->set(map->viewToMapCoords(coords), FoW::REVEALED);
       break;
     case sf::Mouse::Right:
-      foglight->set(map->viewToMapCoords(coords), FoW::HIDDEN);
       break;
     default:
       break;

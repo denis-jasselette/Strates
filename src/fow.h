@@ -36,13 +36,16 @@ class FoW : public Map {
     FoW(Map *map, TileMap *tileMap, FogType type = DARK);
     ~FoW();
 
-    void set(int x, int y, FogStatus value);
-    void set(const sf::Vector2i &coords, FogStatus value);
+    void reset(FogStatus value = HIDDEN);
+    void set(int x, int y, int radius, FogStatus value);
+    void set(const sf::Vector2i &coords, int radius, FogStatus value);
   private:
     Map *map;
     FogStatus **status;
     int origin;
 
+    void setRow(int x1, int x2, int y, FogStatus value);
+    void setTile(int x, int y, int value);
     void updateNeighbours(int x, int y);
     void updateTile(int x, int y);
 };

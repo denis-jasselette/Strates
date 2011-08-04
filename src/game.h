@@ -25,11 +25,13 @@ class Game {
 
     void onEvent(sf::Event&);
     void onKeyReleased(sf::Event&);
+    void onMouseWheelMoved(sf::Event&);
     void onMouseButtonPressed(sf::Event&);
 
     bool running;
     sf::RenderWindow *window;
     Cursor *cursor;
+    int radius;
     ImageManager *imageMgr;
     Map *map;
     TileMap *fogTileMap;
