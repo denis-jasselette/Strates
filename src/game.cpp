@@ -147,7 +147,7 @@ void Game::toggleFullscreen() {
   }
   else {
     sf::VideoMode mode = sf::VideoMode::GetDesktopMode();
-    window->Create(sf::VideoMode(800, 600, mode.BitsPerPixel), title);
+    window->Create(sf::VideoMode(1024, 768, mode.BitsPerPixel), title);
   }
   window->ShowMouseCursor(false);
   isFullscreen = !isFullscreen;
