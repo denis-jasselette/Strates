@@ -7,6 +7,7 @@
 #include "map.h"
 #include "tileMap.h"
 #include "fow.h"
+#include "hud.h"
 
 class Game {
   public:
@@ -38,6 +39,7 @@ class Game {
     Map *map;
     TileMap *fogTileMap;
     FoW *fog, *foglight;
+    Hud *hud;
 };
 
 #endif	/* _GAME_H_ */

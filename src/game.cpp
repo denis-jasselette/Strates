@@ -16,6 +16,8 @@ Game::Game() {
   fogTileMap = new TileMap("fow", imageMgr);
   fog = new FoW(map, fogTileMap);
   foglight = new FoW(map, fogTileMap, FoW::LIGHT);
+
+  hud = new Hud(imageMgr);
 }
 
 Game::~Game() {
@@ -25,6 +27,7 @@ Game::~Game() {
   delete fog;
   delete foglight;
   delete fogTileMap;
+  delete hud;
 }
 
 void Game::onEvent(sf::Event &evt) {
@@ -132,6 +135,7 @@ void Game::paint() {
 #if DEBUG
   paintDebug();
 #endif
+  hud->paint(window);
   cursor->paint();
 }
 
