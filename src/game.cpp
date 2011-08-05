@@ -76,7 +76,7 @@ void Game::exit() {
 }
 
 void Game::update() {
-  int scrollSpeed = 5;
+  int scrollSpeed = 6;
   sf::View view = window->GetView();
   if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Left))
     view.Move(-scrollSpeed, 0);
