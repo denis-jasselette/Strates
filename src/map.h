@@ -26,7 +26,7 @@ class Map {
     sf::Vector2i viewSize;
     sf::IntRect viewRect;
     sf::IntRect renderedRect;
-    sf::RenderImage *render;
+    sf::RenderTexture *render;
 
     Map(const Map &map, TileMap *tileMap);
     Map(int width, int height, TileMap *tileMap);

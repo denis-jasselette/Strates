@@ -2,17 +2,17 @@
 #include "imageManager.h"
 
 ImageManager::~ImageManager() {
-  std::map<std::string, sf::Image*>::iterator i;
+  std::map<std::string, sf::Texture*>::iterator i;
   for (i = pool.begin(); i != pool.end(); i++)
     delete i->second;
 }
 
-const sf::Image *ImageManager::get(std::string name) {
-  sf::Image *value = pool[name];
+const sf::Texture *ImageManager::get(std::string name) {
+  sf::Texture *value = pool[name];
   if (value != NULL)
     return value;
 
-  sf::Image *image = new sf::Image();
+  sf::Texture *image = new sf::Texture();
   if (!image->LoadFromFile(nameToFile(name))) {
     log("Error: Loading of `" + name + "' failed");
     return NULL;

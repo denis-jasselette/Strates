@@ -7,7 +7,7 @@
 #define DEBUG 1
 
 #define FRAMERATE_LIMIT 60
-#define CACHE_RENDER false
+#define CACHE_RENDER true
 
 std::string res_path(std::string basename);
 
