@@ -5,7 +5,7 @@
 
 Game::Game() {
   window = new sf::RenderWindow();
-  isFullscreen = false; // changed to true by toggleFullscreen
+  isFullscreen = true; // changed to false by toggleFullscreen
   toggleFullscreen();
 
   imageMgr = new ImageManager();
@@ -135,7 +135,8 @@ void Game::paint() {
 #if DEBUG
   paintDebug();
 #endif
-  hud->paint(window);
+  //TODO: unleash the hud *only* when decent graphics for it are added
+  //hud->paint(window);
   cursor->paint();
 }
 
@@ -147,7 +148,7 @@ void Game::toggleFullscreen() {
   }
   else {
     sf::VideoMode mode = sf::VideoMode::GetDesktopMode();
-    window->Create(sf::VideoMode(1024, 768, mode.BitsPerPixel), title);
+    window->Create(sf::VideoMode(800, 600, mode.BitsPerPixel), title);
   }
   window->ShowMouseCursor(false);
   isFullscreen = !isFullscreen;
