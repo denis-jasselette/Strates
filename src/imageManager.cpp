@@ -7,7 +7,7 @@ ImageManager::~ImageManager() {
     delete i->second;
 }
 
-sf::Image *ImageManager::get(std::string name) {
+const sf::Image *ImageManager::get(std::string name) {
   sf::Image *value = pool[name];
   if (value != NULL)
     return value;

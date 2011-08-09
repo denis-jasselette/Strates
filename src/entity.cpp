@@ -34,7 +34,7 @@ void Entity::paint(sf::RenderTarget *target) {
 }
 
 void Entity::loadSprite(ImageManager *imgMgr, const std::string &name) {
-  sf::Image *src = imgMgr->get(name);
+  const sf::Image *src = imgMgr->get(name);
   sprite = new sf::Sprite(*src);
   sprite->SetSubRect(spriteRect);
 }

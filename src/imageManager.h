@@ -8,7 +8,7 @@
 class ImageManager {
   public:
     ~ImageManager();
-    sf::Image *get(std::string);
+    const sf::Image *get(std::string);
 
   private:
     std::string nameToFile(std::string);

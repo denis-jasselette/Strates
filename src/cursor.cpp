@@ -5,7 +5,7 @@ Cursor::Cursor(sf::RenderWindow *window, ImageManager *imageMgr) {
   this->window = window;
   this->imageMgr = imageMgr;
 
-  sf::Image *image = imageMgr->get("cursor");
+  const sf::Image *image = imageMgr->get("cursor");
   sprite = new sf::Sprite(*image);
 
   position = sf::Vector2i(window->GetWidth() / 2, window->GetHeight() / 2);

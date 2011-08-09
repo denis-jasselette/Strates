@@ -2,7 +2,7 @@
 #include "utils.h"
 
 HudPanel::HudPanel(ImageManager *imgMgr) {
-  sf::Image *src = imgMgr->get("hudpanel");
+  const sf::Image *src = imgMgr->get("hudpanel");
   sprite = new sf::Sprite(*src);
   leftBorderRect = sf::IntRect(0, 0, 16, src->GetHeight());
   backgroundRect = sf::IntRect(17, 0, 46, src->GetHeight());
