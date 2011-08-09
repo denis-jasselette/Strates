@@ -26,7 +26,7 @@ void Map::init(int width, int height, TileMap *tileMap) {
 
 #if CACHE_RENDER
   renderedRect = sf::IntRect(0, 0, 0, 0);
-  render = new sf::RenderImage();
+  render = new sf::RenderTexture();
 #else
   render = NULL;
 #endif
@@ -117,7 +117,7 @@ void Map::paint(sf::RenderTarget *target) {
     render->Display();
   }
 
-  sf::Sprite sprite(render->GetImage());
+  sf::Sprite sprite(render->GetTexture());
   sf::Vector2i mapCoords(paintRect.Left, paintRect.Top);
   sprite.SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
   target->Draw(sprite);
