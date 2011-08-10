@@ -1,6 +1,6 @@
-CC := g++
+CXX := g++
 
-CFLAGS := -g -Wall
+CXXFLAGS := -g -Wall
 LDFLAGS := -lm -lsfml-graphics -lsfml-system
 
 EXEC := a.out
