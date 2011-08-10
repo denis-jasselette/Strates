@@ -36,6 +36,10 @@ void Game::onEvent(sf::Event &evt) {
       log("Closed");
       exit();
       break;
+    case sf::Event::Resized:
+      log("Resized");
+      onResized(evt);
+      break;
     case sf::Event::KeyReleased:
       log("KeyReleased");
       onKeyReleased(evt);
@@ -152,6 +156,12 @@ void Game::toggleFullscreen() {
   }
   window->ShowMouseCursor(false);
   isFullscreen = !isFullscreen;
+}
+
+void Game::onResized(sf::Event &evt) {
+  sf::View view = window->GetView();
+  view.SetSize(evt.Size.Width, evt.Size.Height);
+  window->SetView(view);
 }
 
 void Game::onKeyReleased(sf::Event &evt) {

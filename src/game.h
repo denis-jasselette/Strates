@@ -27,6 +27,7 @@ class Game {
     void update();
 
     void onEvent(sf::Event&);
+    void onResized(sf::Event&);
     void onKeyReleased(sf::Event&);
     void onMouseWheelMoved(sf::Event&);
     void onMouseButtonPressed(sf::Event&);
