@@ -17,6 +17,10 @@ Entity::~Entity() {
   delete sprite;
 }
 
+void Entity::setMap(Map *map) {
+  this->map = map;
+}
+
 sf::Vector2i Entity::getPosition() {
   return position;
 }
@@ -29,7 +33,7 @@ void Entity::paint(sf::RenderTarget *target) {
   if (!sprite)
     return;
 
-  sprite->SetPosition((sf::Vector2f) position);
+  sprite->SetPosition((sf::Vector2f) map->mapToViewCoords(position));
   target->Draw(*sprite);
 }
 

@@ -4,7 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "imageManager.h"
 #include "cursor.h"
+#include "techTree.h"
 #include "map.h"
+#include "player.h"
 #include "tileMap.h"
 #include "fow.h"
 #include "hud.h"
@@ -37,7 +39,9 @@ class Game {
     Cursor *cursor;
     int radius;
     ImageManager *imageMgr;
+    TechTree *techTree;
     Map *map;
+    std::vector<Player*> players;
     TileMap *fogTileMap;
     FoW *fog, *foglight;
     Hud *hud;

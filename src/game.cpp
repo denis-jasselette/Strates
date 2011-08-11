@@ -11,7 +11,11 @@ Game::Game() {
   imageMgr = new ImageManager();
   cursor = new Cursor(window, imageMgr);
   radius = 3;
+  techTree = TechTree::fromFile(res_path("techtree.json"), imageMgr);
   map = Map::fromFile(res_path("map"), imageMgr);
+
+  players.push_back(new Player("Raymond", techTree, map));
+  players.push_back(new Player("Jean-Pierre", techTree, map));
 
   fogTileMap = new TileMap("fow", imageMgr);
   fog = new FoW(map, fogTileMap);
@@ -21,8 +25,13 @@ Game::Game() {
 }
 
 Game::~Game() {
+  std::vector<Player*>::iterator it;
+  for (it = players.begin(); it != players.end(); it++)
+    delete *it;
+
   delete cursor;
   delete imageMgr;
+  delete techTree;
   delete map;
   delete fog;
   delete foglight;
@@ -103,6 +112,10 @@ void Game::update() {
   sf::Vector2i coords = (sf::Vector2i) cursor->getViewPosition();
   fog->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
   foglight->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
+
+  std::vector<Player*>::iterator it;
+  for (it = players.begin(); it != players.end(); it++)
+    (*it)->update();
 }
 
 void Game::paintDebug() {
@@ -133,6 +146,11 @@ void Game::select() {
 void Game::paint() {
   window->Clear(sf::Color::Black);
   map->paint(window);
+
+  std::vector<Player*>::iterator it;
+  for (it = players.begin(); it != players.end(); it++)
+    (*it)->paint(window);
+
   foglight->paint(window);
   fog->paint(window);
   select();

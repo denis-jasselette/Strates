@@ -5,6 +5,7 @@
 #include <string>
 #include "config.h"
 #include "imageManager.h"
+#include "map.h"
 
 class Entity {
   public:
@@ -16,8 +17,10 @@ class Entity {
 
     sf::Vector2i getPosition();
     void setPosition(const sf::Vector2i &position);
+    void setMap(Map *map);
     void paint(sf::RenderTarget *target);
   protected:
+    Map *map;
     std::string className;
     //TODO: reference the owner player
     std::string displayName;
