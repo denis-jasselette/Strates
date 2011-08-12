@@ -13,6 +13,19 @@ Entity::Entity(const std::string &className,
   sprite = NULL;
 }
 
+Entity::Entity(const Entity &that) {
+  map = that.map;
+  className = that.className;
+  displayName = that.displayName;
+  spriteRect = that.spriteRect;
+  size = that.size;
+  position = sf::Vector2i(0, 0);
+
+  sprite = NULL;
+  if (sprite)
+    sprite = new sf::Sprite(*that.sprite);
+}
+
 Entity::~Entity() {
   delete sprite;
 }

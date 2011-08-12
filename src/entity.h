@@ -13,6 +13,7 @@ class Entity {
         const std::string &displayName,
         const sf::IntRect &spriteRect,
         int size);
+    Entity(const Entity &that);
     virtual ~Entity();
 
     sf::Vector2i getPosition();
