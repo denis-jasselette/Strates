@@ -5,8 +5,11 @@ MenuScreen::MenuScreen(Application *app) : Screen(app) {
   // TODO: construct things
 }
 
-int MenuScreen::run(sf::RenderWindow &window) {
+ScreenID MenuScreen::run() {
   log("MENU");
+
+  sf::RenderWindow &window = *app->getWindow();
+
   bool running = true;
   while (running) {
     sf::Event evt;

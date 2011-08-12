@@ -23,7 +23,7 @@ class Application {
   private:
     sf::RenderWindow window;
     std::vector<Screen*> screens;
-    int current;
+    ScreenID current;
     bool isFullscreen;
     ImageManager *imgMgr;
     Cursor *cursor;

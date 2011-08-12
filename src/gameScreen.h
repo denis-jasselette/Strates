@@ -2,7 +2,7 @@
 #define _GAMESCREEN_H_
 
 #include "application.h"
-#include "screens.h"
+#include "screen.h"
 #include "game.h"
 #include "hud.h"
 
@@ -10,11 +10,11 @@ class GameScreen : public Screen {
   public:
     GameScreen(Application *app);
 
-    int run(sf::RenderWindow &window);
+    ScreenID run();
   private:
     Game game;
     Hud hud;
-    int nextScreen;
+    ScreenID nextScreen;
 
     void onEvent(sf::Event &evt);
     void exit();

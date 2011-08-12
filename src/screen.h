@@ -3,6 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 
+enum ScreenID {
+  SCREEN_THIS = -2,
+  SCREEN_EXIT = -1,
+  SCREEN_GAME,
+  SCREEN_MENU,
+};
+
 class Application;
 #include "application.h"
 
@@ -11,7 +18,7 @@ class Screen {
     Screen(Application *app);
     virtual ~Screen();
 
-    virtual int run(sf::RenderWindow &window) = 0;
+    virtual ScreenID run() = 0;
   protected:
     Application *app;
 };

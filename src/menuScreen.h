@@ -8,9 +8,8 @@ class MenuScreen : public Screen {
   public:
     MenuScreen(Application *app);
 
-    int run(sf::RenderWindow &window);
+    ScreenID run();
   private:
-    Application *app;
 };
 
 #endif /* _MENUSCREEN_H_ */

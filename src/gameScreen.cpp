@@ -36,7 +36,7 @@ void GameScreen::onEvent(sf::Event &evt) {
   }
 }
 
-int GameScreen::run(sf::RenderWindow &window2) {
+ScreenID GameScreen::run() {
   log("GAME");
 
   sf::RenderWindow &window = *app->getWindow();

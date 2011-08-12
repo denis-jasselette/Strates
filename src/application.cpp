@@ -16,7 +16,7 @@ Application::Application() {
   MenuScreen *menu = new MenuScreen(this);
   screens.push_back(menu);
 
-  current = 0;
+  current = SCREEN_GAME;
 }
 
 Application::~Application() {
@@ -30,7 +30,7 @@ Application::~Application() {
 
 int Application::run() {
   while (current >= 0)
-    current = screens[current]->run(window);
+    current = screens[current]->run();
 
   return 0;
 }
