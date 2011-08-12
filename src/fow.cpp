@@ -22,6 +22,7 @@ FoW::~FoW() {
 
 void FoW::setTile(int x, int y, int value) {
   tiles[y][x] = origin + value;
+  refresh();
 }
 
 void FoW::reset(FogStatus value) {

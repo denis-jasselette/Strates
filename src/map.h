@@ -27,12 +27,20 @@ class Map {
     sf::IntRect viewRect;
     sf::IntRect renderedRect;
     sf::RenderTexture *render;
+    bool forceRefresh;
 
     Map(const Map &map, TileMap *tileMap);
     Map(int width, int height, TileMap *tileMap);
     void init(int width, int height, TileMap *tileMap);
 
-    void paint(sf::RenderTarget *target, sf::IntRect &paintRect);
+    bool rectEqual(sf::IntRect &a, sf::IntRect &b);
+    void refresh();
+    void checkCacheSize(sf::IntRect &paintRect);
+    bool needsCacheRefresh(sf::IntRect &paintRect);
+    void refreshCache(sf::IntRect &paintRect);
+    void paint(sf::RenderTarget *target,
+        const sf::IntRect &paintRect,
+        const sf::Vector2i &targetOrig = sf::Vector2i(0, 0));
 };
 
 #endif /* _MAP_H_ */

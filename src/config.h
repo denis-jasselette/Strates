@@ -12,7 +12,7 @@
 #include <cassert>
 
 #define FRAMERATE_LIMIT 60
-#define CACHE_RENDER false
+#define CACHE_RENDER 0
 
 std::string res_path(std::string basename);
 

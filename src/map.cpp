@@ -27,6 +27,7 @@ void Map::init(int width, int height, TileMap *tileMap) {
 #if CACHE_RENDER
   renderedRect = sf::IntRect(0, 0, 0, 0);
   render = new sf::RenderTexture();
+  refresh();
 #else
   render = NULL;
 #endif
@@ -91,12 +92,49 @@ fail:
   return res;
 }
 
-/* FIXME */
-static bool rectEqual(sf::IntRect &a, sf::IntRect &b) {
+bool Map::rectEqual(sf::IntRect &a, sf::IntRect &b) {
   return a.Left == b.Left
     && a.Top == b.Top
     && a.Width == b.Width
     && a.Height == b.Height;
+}
+
+void Map::refresh() {
+  forceRefresh = true;
+}
+
+bool Map::needsCacheRefresh(sf::IntRect &paintRect) {
+  return forceRefresh
+    || renderedRect.Left > paintRect.Left
+    || renderedRect.Top > paintRect.Top
+    || renderedRect.Left + renderedRect.Width < paintRect.Left + paintRect.Width
+    || renderedRect.Top + renderedRect.Height < paintRect.Top + paintRect.Height;
+}
+
+void Map::checkCacheSize(sf::IntRect &paintRect) {
+  if (renderedRect.Width < paintRect.Width + 1
+      || renderedRect.Height < paintRect.Height + 1)
+  {
+    renderedRect.Width = paintRect.Width + 2;
+    renderedRect.Height = paintRect.Height + 2;
+    render->Create(renderedRect.Width * tileMap->getTileWidth(),
+        renderedRect.Height * tileMap->getTileHeight());
+  }
+}
+
+void Map::refreshCache(sf::IntRect &paintRect) {
+  if (!needsCacheRefresh(paintRect))
+    return;
+
+  forceRefresh = false;
+  checkCacheSize(paintRect);
+
+  render->Clear(sf::Color(0, 0, 0, 0));
+  sf::Vector2i orig(paintRect.Left, paintRect.Top);
+  renderedRect.Left = paintRect.Left;
+  renderedRect.Top = paintRect.Top;
+  paint(render, renderedRect, orig);
+  render->Display();
 }
 
 void Map::paint(sf::RenderTarget *target) {
@@ -105,20 +143,10 @@ void Map::paint(sf::RenderTarget *target) {
   sf::IntRect paintRect = viewToMapRect(targetRect);
 
 #if CACHE_RENDER
-  if (!rectEqual(renderedRect, paintRect)) {
-    if (renderedRect.Width != paintRect.Width
-        || renderedRect.Height != paintRect.Height)
-    {
-      render->Create(paintRect.Width * tileMap->getTileWidth(),
-          paintRect.Height * tileMap->getTileHeight());
-    }
-    paint(render, paintRect);
-    renderedRect = paintRect;
-    render->Display();
-  }
+  refreshCache(paintRect);
 
   sf::Sprite sprite(render->GetTexture());
-  sf::Vector2i mapCoords(paintRect.Left, paintRect.Top);
+  sf::Vector2i mapCoords(renderedRect.Left, renderedRect.Top);
   sprite.SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
   target->Draw(sprite);
 #else
@@ -126,7 +154,10 @@ void Map::paint(sf::RenderTarget *target) {
 #endif
 }
 
-void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
+void Map::paint(sf::RenderTarget *target,
+    const sf::IntRect &paintRect,
+    const sf::Vector2i &targetOrig)
+{
   for (int i = 0; i < paintRect.Height; i++) {
     for (int j = 0; j < paintRect.Width; j++) {
       sf::Vector2i mapCoords(j + paintRect.Left, i + paintRect.Top);
@@ -134,7 +165,8 @@ void Map::paint(sf::RenderTarget *target, sf::IntRect &paintRect) {
         continue;
 
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);
-      sprite->SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
+      sf::Vector2i pos = mapCoords - targetOrig;
+      sprite->SetPosition(sf::Vector2f(mapToViewCoords(pos)));
       target->Draw(*sprite);
     }
   }
