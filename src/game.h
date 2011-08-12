@@ -2,49 +2,32 @@
 #define	_GAME_H_
 
 #include <SFML/Graphics.hpp>
-#include "imageManager.h"
-#include "cursor.h"
+#include "application.h"
 #include "techTree.h"
 #include "map.h"
 #include "player.h"
 #include "tileMap.h"
 #include "fow.h"
-#include "hud.h"
 
 class Game {
   public:
-    Game();
+    Game(Application *app);
     ~Game();
-    void run();
-    void exit();
 
+    void paint();
+    void update();
+    int getRadius();
+    void setRadius(int radius);
   private:
-    void toggleFullscreen();
-
     void select();
 
-    void paintDebug();
-    void paint();
-
-    void update();
-
-    void onEvent(sf::Event&);
-    void onResized(sf::Event&);
-    void onKeyReleased(sf::Event&);
-    void onMouseWheelMoved(sf::Event&);
-    void onMouseButtonPressed(sf::Event&);
-
-    bool running, isFullscreen;
-    sf::RenderWindow *window;
-    Cursor *cursor;
+    Application *app;
     int radius;
-    ImageManager *imageMgr;
     TechTree *techTree;
     Map *map;
     std::vector<Player*> players;
     TileMap *fogTileMap;
     FoW *fog, *foglight;
-    Hud *hud;
 };
 
 #endif	/* _GAME_H_ */
