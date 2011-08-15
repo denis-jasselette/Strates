@@ -6,11 +6,20 @@
 #include "game.h"
 #include "hud.h"
 
+/**
+ * Implements a Screen managing the game.
+ */
 class GameScreen : public Screen {
   public:
+    /**
+     * Constructor.
+     *
+     * @param app    a pointer to the parent Application
+     */
     GameScreen(Application *app);
 
     ScreenID run();
+
   private:
     Game game;
     Hud hud;

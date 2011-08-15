@@ -9,15 +9,49 @@
 #include "tileMap.h"
 #include "fow.h"
 
+/**
+ * Handles the Player's and Map of a game.
+ */
 class Game {
   public:
+    /**
+     * Constructor.
+     *
+     * @param app    a pointer to the parent Application
+     */
     Game(Application *app);
+
+    /**
+     * Destructor.
+     */
     ~Game();
 
+    /**
+     * Paints the Map and the Player's.
+     */
     void paint();
+
+    /**
+     * Updates the status of the Game.
+     *
+     * This should be called at each frame.
+     */
     void update();
+
+    /**
+     * Returns the visibility radius of the Cursor.
+     *
+     * @return the radius
+     */
     int getRadius();
+
+    /**
+     * Sets the visibility radius of the Cursor.
+     *
+     * @param radius    the visibility radius
+     */
     void setRadius(int radius);
+
   private:
     void select();
 

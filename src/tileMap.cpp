@@ -14,7 +14,7 @@ TileMap::~TileMap() {
   delete sprite;
 }
 
-sf::Sprite *TileMap::get(int type) {
+sf::Sprite *TileMap::get(unsigned int type) {
   int x = type % cols;
   int y = type / cols;
   sf::IntRect rect(x * (tileWidth + 1), y * (tileHeight + 1), tileWidth, tileHeight);

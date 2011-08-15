@@ -6,18 +6,95 @@
 #include "config.h"
 #include "tileMap.h"
 
+/**
+ * Handles a grid of tiles.
+ */
 class Map {
   public:
+    /**
+     * Constructs a Map from a file and returns a pointer to it.
+     *
+     * @param filename    the name of the file to read in the resource
+     *                    directory
+     * @param imgMgr      the ImageManager to use to load the TileMap
+     *
+     * @return            a pointer to the Map constructed
+     */
     static Map *fromFile(std::string filename, ImageManager *imgMgr);
+
+    /**
+     * Destructor.
+     */
     ~Map();
 
+    /**
+     * Paints the grid of tiles on a RenderTarget.
+     *
+     * @param target    a pointer to the RenderTarget on which to paint
+     */
     void paint(sf::RenderTarget *target);
+
+    /**
+     * Returns a version of the IntRect totally contained in the Map in View
+     * coordinates.
+     *
+     * @param rect    the IntRect
+     *
+     * @return        an IntRect totally contained in the Map and the most
+     *                similar to rect as possible
+     */
     sf::IntRect clampViewRect(const sf::IntRect &rect);
+
+    /**
+     * Converts a position in View coordinates to a position in Map
+     * coordinates.
+     *
+     * @param coords    the position in View coordinates
+     *
+     * @return          the position in Map coordinates
+     */
     sf::Vector2i viewToMapCoords(sf::Vector2i &coords);
+
+    /**
+     * Converts an IntRect in View coordinates to an IntRect in Map
+     * coordinates.
+     *
+     * @param viewRect    the IntRect in View coordinates
+     *
+     * @return            the IntRect in Map coordinates
+     */
     sf::IntRect viewToMapRect(sf::IntRect &viewRect);
+
+    /**
+     * Converts a position in Map coordinates to a position in View
+     * coordinates.
+     *
+     * @param coords    the position in Map coordinates
+     *
+     * @return          the position in View coordinates
+     */
     sf::Vector2i mapToViewCoords(sf::Vector2i &coords);
+
+    /**
+     * Converts an IntRect in Map coordinates to an IntRect in View
+     * coordinates.
+     *
+     * @param viewRect    the IntRect in Map coordinates
+     *
+     * @return            the IntRect in View coordinates
+     */
     sf::IntRect mapToViewRect(sf::Vector2i &coords);
+
+    /**
+     * Returns whether a position in Map coordinates is contained in the Map.
+     *
+     * @param x    the column of the position
+     * @param y    the row of the position
+     *
+     * @return     true if the position is in the Map, false otherwise
+     */
     bool contains(int x, int y);
+
   protected:
     int width, height;
     int **tiles;
