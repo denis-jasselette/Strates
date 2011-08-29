@@ -91,9 +91,42 @@ class Widget {
      */
     void repaint();
 
+    /**
+     * Sets the sensitivity.
+     *
+     * A sensitive Widget can react to events.
+     *
+     * @param sensitive    the new value
+     * @param recursive    whether the sensitivity should be applied to all the
+     *                     descendants
+     */
     void setSensitive(bool sensitive = true, bool recursive = true);
+
+    /**
+     * Returns whether the Widget is sensitive.
+     *
+     * @return    true if it is sensitive, false otherwise
+     */
     bool isSensitive();
+
+    /**
+     * Returns the EventListener associated to the Event::Type.
+     *
+     * @param type    the Event::Type to look for
+     *
+     * @return        the corresponding EventListener
+     */
     const EventListener &getListener(Event::Type type);
+
+    /**
+     * Associates an EventCallback to an Event::Type.
+     *
+     * The EventCallback will be executed if an Event of the given type is
+     * received.
+     *
+     * @param type    the Event::Type to react to
+     * @param func    the EventCallback to execute
+     */
     void addEventCallback(Event::Type type,
         const EventCallback<Widget> &func);
 
