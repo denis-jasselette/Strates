@@ -50,9 +50,7 @@ ScreenID GameScreen::run() {
     if (nextScreen != SCREEN_THIS)
       break;
 
-    update();
-    paint();
-    window.Display();
+    tick(&window);
   }
 
   if (nextScreen != SCREEN_THIS)
@@ -67,6 +65,7 @@ void GameScreen::exit() {
 
 void GameScreen::update() {
   game.update();
+  repaint();
 }
 
 void GameScreen::paintDebug() {
@@ -86,16 +85,16 @@ void GameScreen::paintDebug() {
   window.Draw(out);
 }
 
-void GameScreen::paint() {
-  sf::RenderWindow &window = *app->getWindow();
-  window.Clear(sf::Color::Black);
+void GameScreen::paint(sf::RenderTarget *target) {
+  target->Clear(sf::Color::Black);
   game.paint();
 #if DEBUG
   paintDebug();
 #endif
   //TODO: unleash the hud *only* when decent graphics for it are added
-  //hud.paint(window);
+  //hud.paint(target);
   app->getCursor()->paint();
+  target->Display();
 }
 
 void GameScreen::onResized(sf::Event &evt) {

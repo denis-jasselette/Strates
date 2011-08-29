@@ -29,7 +29,7 @@ class GameScreen : public Screen {
     void exit();
     void update();
     void paintDebug();
-    void paint();
+    void paint(sf::RenderTarget *target);
     void onResized(sf::Event &evt);
     void onKeyReleased(sf::Event &evt);
     void onMouseWheelMoved(sf::Event &evt);

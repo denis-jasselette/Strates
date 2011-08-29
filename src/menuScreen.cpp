@@ -41,8 +41,13 @@ ScreenID MenuScreen::run() {
     if (!running)
       break;
 
+    tick(&window);
     window.Display();
   }
 
   return SCREEN_EXIT;
 }
+
+void MenuScreen::update() {}
+
+void MenuScreen::paint(sf::RenderTarget *target) {}

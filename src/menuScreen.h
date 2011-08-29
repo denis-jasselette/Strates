@@ -1,6 +1,7 @@
 #ifndef _MENUSCREEN_H_
 #define _MENUSCREEN_H_
 
+#include <SFML/Graphics.hpp>
 #include "application.h"
 #include "screens.h"
 
@@ -17,6 +18,10 @@ class MenuScreen : public Screen {
     MenuScreen(Application *app);
 
     ScreenID run();
+
+  private:
+    void update();
+    void paint(sf::RenderTarget *target);
 };
 
 #endif /* _MENUSCREEN_H_ */

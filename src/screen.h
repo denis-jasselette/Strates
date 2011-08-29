@@ -2,6 +2,7 @@
 #define _SCREEN_H_
 
 #include <SFML/Graphics.hpp>
+#include "widget.h"
 
 enum ScreenID {
   SCREEN_THIS = -2,
@@ -16,7 +17,7 @@ class Application;
 /**
  * This class is a basis to implement screens run by an Application.
  */
-class Screen {
+class Screen : public Widget {
   public:
     /**
      * Constructor.
