@@ -22,7 +22,7 @@ class Widget {
     /**
      * Constructor.
      */
-    Widget(Widget *parent);
+    Widget(Widget *parent = NULL);
 
     /**
      * Destructor.
@@ -91,7 +91,7 @@ class Widget {
      */
     void repaint();
 
-    void setSensitive(bool sensitive);
+    void setSensitive(bool sensitive = true, bool recursive = true);
     bool isSensitive();
     const EventListener &getListener(Event::Type type);
     void addEventCallback(Event::Type type,

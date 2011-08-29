@@ -69,8 +69,14 @@ void Widget::repaint() {
     (*it)->repaint();
 }
 
-void Widget::setSensitive(bool sensitive) {
+void Widget::setSensitive(bool sensitive, bool recursive) {
   this->sensitive = sensitive;
+
+  if (recursive) {
+    std::vector<Widget*>::iterator it;
+    for (it = children.begin(); it < children.end(); it++)
+      (*it)->setSensitive(sensitive);
+  }
 }
 
 bool Widget::isSensitive() {
@@ -97,11 +103,13 @@ const Widget::EventListener &Widget::getListener(Event::Type type) {
 }
 
 void Widget::trackEventType(Event::Type type) {
-  eventTypesTracked[type]++;
+  if (eventTypesTracked[type]++ == 0)
+    parent->trackEventType(type);
 }
 
 void Widget::untrackEventType(Event::Type type) {
-  eventTypesTracked[type]--;
+  if (--eventTypesTracked[type] == 0)
+    parent->untrackEventType(type);
 }
 
 bool Widget::isEventTypeTracked(Event::Type type) {
