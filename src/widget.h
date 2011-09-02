@@ -16,7 +16,7 @@
  */
 class Widget {
   private:
-    typedef std::vector< EventCallback<Widget> > EventListener;
+    typedef std::vector<EventCallback*> EventListener;
 
   public:
     /**
@@ -116,7 +116,9 @@ class Widget {
      *
      * @return        the corresponding EventListener
      */
-    const EventListener &getListener(Event::Type type);
+    const EventListener *getListener(Event::Type type);
+
+    int countListeners(Event::Type type);
 
     /**
      * Associates an EventCallback to an Event::Type.
@@ -127,8 +129,7 @@ class Widget {
      * @param type    the Event::Type to react to
      * @param func    the EventCallback to execute
      */
-    void addEventCallback(Event::Type type,
-        const EventCallback<Widget> &func);
+    void addEventCallback(Event::Type type, EventCallback *func);
 
   protected:
     Widget *parent;
@@ -137,6 +138,7 @@ class Widget {
     sf::IntRect hitBox;
     bool sensitive;
 
+    void dispatchEvent(Event &evt);
     virtual void update() = 0;
     virtual void paint(sf::RenderTarget *target) = 0;
 
@@ -149,7 +151,6 @@ class Widget {
     bool isEventTypeTracked(Event::Type type);
     bool shouldPropagate(Widget *child, const Event &evt);
     void propagateEvent(Event &evt);
-    void dispatchEvent(Event &evt);
 };
 
 #endif /* _WIDGET_H_ */

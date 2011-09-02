@@ -1,9 +1,10 @@
+#include <functional>
 #include <SFML/Window/Keyboard.hpp>
 #include "config.h"
 #include "game.h"
 #include "utils.h"
 
-Game::Game(Application *app) {
+Game::Game(Application *app, Widget *parent) : Widget(parent) {
   this->app = app;
 
   radius = 3;
@@ -16,6 +17,15 @@ Game::Game(Application *app) {
   fogTileMap = new TileMap("fow", app->getImgMgr());
   fog = new FoW(map, fogTileMap);
   foglight = new FoW(map, fogTileMap, FoW::LIGHT);
+
+  EventCallback *func;
+  func = new EventMethodCallback<Game>(this, &Game::onMousePressed);
+  addEventCallback("MousePressed", func);
+}
+
+bool Game::onMousePressed(const Event &evt) {
+  log("received event");
+  return true;
 }
 
 Game::~Game() {
@@ -56,6 +66,8 @@ void Game::update() {
   std::vector<Player*>::iterator it;
   for (it = players.begin(); it != players.end(); it++)
     (*it)->update();
+
+  repaint();
 }
 
 void Game::select() {
@@ -67,15 +79,15 @@ void Game::select() {
   app->getWindow()->Draw(selection);
 }
 
-void Game::paint() {
-  map->paint(app->getWindow());
+void Game::paint(sf::RenderTarget *target) {
+  map->paint(target);
 
   std::vector<Player*>::iterator it;
   for (it = players.begin(); it != players.end(); it++)
-    (*it)->paint(app->getWindow());
+    (*it)->paint(target);
 
-  foglight->paint(app->getWindow());
-  fog->paint(app->getWindow());
+  foglight->paint(target);
+  fog->paint(target);
   select();
 }
 

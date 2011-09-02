@@ -9,6 +9,8 @@ class Event {
   public:
     typedef std::string Type;
 
+    Event();
+
     virtual Type getType() const = 0;
     virtual bool shouldPropagate(Widget *widget) const;
     bool isConsumed() const;

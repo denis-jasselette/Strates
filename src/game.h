@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "application.h"
+#include "widget.h"
 #include "techTree.h"
 #include "map.h"
 #include "player.h"
@@ -12,14 +13,14 @@
 /**
  * Handles the Player's and Map of a game.
  */
-class Game {
+class Game : public Widget {
   public:
     /**
      * Constructor.
      *
      * @param app    a pointer to the parent Application
      */
-    Game(Application *app);
+    Game(Application *app, Widget *parent);
 
     /**
      * Destructor.
@@ -28,8 +29,9 @@ class Game {
 
     /**
      * Paints the Map and the Player's.
+     * FIXME
      */
-    void paint();
+    void paint(sf::RenderTarget *target);
 
     /**
      * Updates the status of the Game.
@@ -51,6 +53,8 @@ class Game {
      * @param radius    the visibility radius
      */
     void setRadius(int radius);
+
+    bool onMousePressed(const Event &evt);
 
   private:
     void select();

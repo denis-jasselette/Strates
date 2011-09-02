@@ -1,10 +1,11 @@
 #include "config.h"
 #include "gameScreen.h"
 #include "utils.h"
+#include "mouseEvent.h"
 
 GameScreen::GameScreen(Application *app) :
   Screen(app),
-  game(app),
+  game(app, this),
   hud(app->getImgMgr())
 {
 }
@@ -51,6 +52,7 @@ ScreenID GameScreen::run() {
       break;
 
     tick(&window);
+    window.Display();
   }
 
   if (nextScreen != SCREEN_THIS)
@@ -87,14 +89,13 @@ void GameScreen::paintDebug() {
 
 void GameScreen::paint(sf::RenderTarget *target) {
   target->Clear(sf::Color::Black);
-  game.paint();
+  game.paint(target);
 #if DEBUG
   paintDebug();
 #endif
   //TODO: unleash the hud *only* when decent graphics for it are added
   //hud.paint(target);
   app->getCursor()->paint();
-  target->Display();
 }
 
 void GameScreen::onResized(sf::Event &evt) {
@@ -128,13 +129,26 @@ void GameScreen::onMouseWheelMoved(sf::Event &evt) {
 }
 
 void GameScreen::onMouseButtonPressed(sf::Event &evt) {
+  int button;
   sf::Vector2i coords = app->getCursorPosition();
+
   switch (evt.MouseButton.Button) {
     case sf::Mouse::Left:
+      button = MouseEvent::BUTTON1;
       break;
     case sf::Mouse::Right:
+      button = MouseEvent::BUTTON2;
+      break;
+    case sf::Mouse::Middle:
+      button = MouseEvent::BUTTON3;
       break;
     default:
+      button = MouseEvent::NOBUTTON;
       break;
+  }
+
+  if (button != MouseEvent::NOBUTTON) {
+    MouseEvent e(MouseEvent::MOUSE_PRESSED, button, coords);
+    dispatchEvent(e);
   }
 }

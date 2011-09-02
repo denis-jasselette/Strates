@@ -3,23 +3,32 @@
 
 #include "event.h"
 
-template <class T>
 class EventCallback {
   public:
-    typedef bool (T::*Method)(const Event&);
+    virtual ~EventCallback() {}
+    virtual bool operator() (const Event &evt) = 0;
+};
 
-    EventCallback(T *obj, Method method) {
+template <typename T>
+class EventMethodCallback : public EventCallback {
+  public:
+    EventMethodCallback(T *obj, bool (T::*method)(const Event&)) {
       this->obj = obj;
       this->method = method;
-    };
-
-    bool operator()(const Event &evt) const {
+    }
+    virtual bool operator() (const Event &evt) {
       return (obj->*method)(evt);
-    };
-
+    }
   private:
     T *obj;
-    Method method;
+    bool (T::*method)(const Event&);
 };
+
+/*template <class T>
+EventCallback EventCallbackFromMethod(T *obj,
+    bool (T::*method)(const Event&))
+{
+  return EventMethodCallback<T>(obj, method);
+}*/
 
 #endif /* _EVENTCALLBACK_H_ */
