@@ -70,28 +70,31 @@ void GameScreen::update() {
   repaint();
 }
 
-void GameScreen::paintDebug() {
+void GameScreen::paintDebug(sf::RenderTarget *target) {
   sf::Text out = sf::Text();
   out.SetCharacterSize(12);
   out.SetColor(sf::Color::White);
 
   std::ostringstream s;
-  sf::RenderWindow &window = *app->getWindow();
   sf::Vector2i cur = app->getCursorPosition();
-  s << "FPS: " << 1000. / window.GetFrameTime() << std::endl
+  s << "FPS: " << 1000. / app->getWindow()->GetFrameTime() << std::endl
     << "Cursor: " << cur.x << ", " << cur.y << std::endl
     << "Radius: " << game->getRadius();
   out.SetString(s.str());
 
-  out.SetPosition(window.ConvertCoords(0, 0));
-  window.Draw(out);
+  out.SetPosition(target->ConvertCoords(0, 0));
+  target->Draw(out);
 }
 
 void GameScreen::paint(sf::RenderTarget *target) {
   target->Clear(sf::Color::Black);
-  game->paint(target);
+}
+
+void GameScreen::tick(sf::RenderTarget *target) {
+  Screen::tick(target);
+
 #if DEBUG
-  paintDebug();
+  paintDebug(target);
 #endif
   //TODO: unleash the hud *only* when decent graphics for it are added
   //hud.paint(target);

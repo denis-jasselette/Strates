@@ -27,8 +27,9 @@ class GameScreen : public Screen {
 
     void onEvent(sf::Event &evt);
     void exit();
+    void tick(sf::RenderTarget *target);
     void update();
-    void paintDebug();
+    void paintDebug(sf::RenderTarget *target);
     void paint(sf::RenderTarget *target);
     void onResized(sf::Event &evt);
     void onKeyReleased(sf::Event &evt);
