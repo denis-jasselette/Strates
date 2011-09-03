@@ -5,9 +5,9 @@
 
 GameScreen::GameScreen(Application *app) :
   Screen(app),
-  game(app, this),
   hud(app->getImgMgr())
 {
+  game = new Game(app, this);
 }
 
 void GameScreen::onEvent(sf::Event &evt) {
@@ -66,7 +66,7 @@ void GameScreen::exit() {
 }
 
 void GameScreen::update() {
-  game.update();
+  game->update();
   repaint();
 }
 
@@ -80,7 +80,7 @@ void GameScreen::paintDebug() {
   sf::Vector2i cur = app->getCursorPosition();
   s << "FPS: " << 1000. / window.GetFrameTime() << std::endl
     << "Cursor: " << cur.x << ", " << cur.y << std::endl
-    << "Radius: " << game.getRadius();
+    << "Radius: " << game->getRadius();
   out.SetString(s.str());
 
   out.SetPosition(window.ConvertCoords(0, 0));
@@ -89,7 +89,7 @@ void GameScreen::paintDebug() {
 
 void GameScreen::paint(sf::RenderTarget *target) {
   target->Clear(sf::Color::Black);
-  game.paint(target);
+  game->paint(target);
 #if DEBUG
   paintDebug();
 #endif
@@ -123,9 +123,9 @@ void GameScreen::onKeyReleased(sf::Event &evt) {
 }
 
 void GameScreen::onMouseWheelMoved(sf::Event &evt) {
-  int radius = game.getRadius() + evt.MouseWheel.Delta;
+  int radius = game->getRadius() + evt.MouseWheel.Delta;
   radius = clamp(radius, 0, 10);
-  game.setRadius(radius);
+  game->setRadius(radius);
 }
 
 void GameScreen::onMouseButtonPressed(sf::Event &evt) {

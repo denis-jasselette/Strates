@@ -21,7 +21,7 @@ class GameScreen : public Screen {
     ScreenID run();
 
   private:
-    Game game;
+    Game *game;
     Hud hud;
     ScreenID nextScreen;
 
