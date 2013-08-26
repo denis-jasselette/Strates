@@ -35,6 +35,8 @@ class Application {
      */
     int run();
 
+    void runScreens();
+
     /**
      * Switches to windowed or fullscreen mode.
      *

@@ -29,10 +29,17 @@ Application::~Application() {
 }
 
 int Application::run() {
-  while (current >= 0)
-    current = screens[current]->run();
+  sf::Thread screensThread(&Application::runScreens, this);
+
+  screensThread.launch();
+  screensThread.wait();
 
   return 0;
+}
+
+void Application::runScreens() {
+  while (current >= 0)
+    current = screens[current]->run();
 }
 
 void Application::setFullscreen(bool value) {
