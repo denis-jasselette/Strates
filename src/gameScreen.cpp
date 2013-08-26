@@ -11,7 +11,7 @@ GameScreen::GameScreen(Application *app) :
 }
 
 void GameScreen::onEvent(sf::Event &evt) {
-  switch (evt.Type) {
+  switch (evt.type) {
     case sf::Event::Closed:
       log("Closed");
       exit();
@@ -45,14 +45,14 @@ ScreenID GameScreen::run() {
   nextScreen = SCREEN_THIS;
   while (nextScreen == SCREEN_THIS) {
     sf::Event evt;
-    while (window.PollEvent(evt))
+    while (window.pollEvent(evt))
       onEvent(evt);
 
     if (nextScreen != SCREEN_THIS)
       break;
 
     tick(&window);
-    window.Display();
+    window.display();
   }
 
   if (nextScreen != SCREEN_THIS)
@@ -72,22 +72,22 @@ void GameScreen::update() {
 
 void GameScreen::paintDebug(sf::RenderTarget *target) {
   sf::Text out = sf::Text();
-  out.SetCharacterSize(12);
-  out.SetColor(sf::Color::White);
+  out.setFont(DEFAULT_FONT);
+  out.setCharacterSize(12);
+  out.setColor(sf::Color::White);
 
   std::ostringstream s;
   sf::Vector2i cur = app->getCursorPosition();
-  s << "FPS: " << 1000. / app->getWindow()->GetFrameTime() << std::endl
-    << "Cursor: " << cur.x << ", " << cur.y << std::endl
+  s << "Cursor: " << cur.x << ", " << cur.y << std::endl
     << "Radius: " << game->getRadius();
-  out.SetString(s.str());
+  out.setString(s.str());
 
-  out.SetPosition(target->ConvertCoords(0, 0));
-  target->Draw(out);
+  out.setPosition(target->mapPixelToCoords(sf::Vector2i(10, 10)));
+  target->draw(out);
 }
 
 void GameScreen::paint(sf::RenderTarget *target) {
-  target->Clear(sf::Color::Black);
+  target->clear(sf::Color::Black);
 }
 
 void GameScreen::tick(sf::RenderTarget *target) {
@@ -103,13 +103,13 @@ void GameScreen::tick(sf::RenderTarget *target) {
 
 void GameScreen::onResized(sf::Event &evt) {
   sf::RenderWindow &window = *app->getWindow();
-  sf::View view = window.GetView();
-  view.SetSize(evt.Size.Width, evt.Size.Height);
-  window.SetView(view);
+  sf::View view = window.getView();
+  view.setSize(evt.size.width, evt.size.height);
+  window.setView(view);
 }
 
 void GameScreen::onKeyReleased(sf::Event &evt) {
-  switch (evt.Key.Code) {
+  switch (evt.key.code) {
     case sf::Keyboard::Escape:
     case sf::Keyboard::Q:
       exit();
@@ -126,7 +126,7 @@ void GameScreen::onKeyReleased(sf::Event &evt) {
 }
 
 void GameScreen::onMouseWheelMoved(sf::Event &evt) {
-  int radius = game->getRadius() + evt.MouseWheel.Delta;
+  int radius = game->getRadius() + evt.mouseWheel.delta;
   radius = clamp(radius, 0, 10);
   game->setRadius(radius);
 }
@@ -135,7 +135,7 @@ void GameScreen::onMouseButtonPressed(sf::Event &evt) {
   int button;
   sf::Vector2i coords = app->getCursorPosition();
 
-  switch (evt.MouseButton.Button) {
+  switch (evt.mouseButton.button) {
     case sf::Mouse::Left:
       button = MouseEvent::BUTTON1;
       break;

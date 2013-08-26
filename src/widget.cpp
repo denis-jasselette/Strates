@@ -28,8 +28,8 @@ void Widget::add(Widget *child) {
   if (!child)
     return;
 
-  child->setWidth(hitBox.Width);
-  child->setHeight(hitBox.Height);
+  child->setWidth(hitBox.width);
+  child->setHeight(hitBox.height);
   child->setParent(this);
   children.push_back(child);
 }
@@ -43,20 +43,20 @@ bool Widget::isTopLevel() {
 }
 
 void Widget::setPosition(const sf::Vector2i &pos) {
-  hitBox.Left = pos.x;
-  hitBox.Top = pos.y;
+  hitBox.left = pos.x;
+  hitBox.top = pos.y;
 }
 
 void Widget::setWidth(int width) {
-  hitBox.Width = width;
+  hitBox.width = width;
 }
 
 void Widget::setHeight(int height) {
-  hitBox.Height = height;
+  hitBox.height = height;
 }
 
 bool Widget::contains(const sf::Vector2i &point) {
-  return hitBox.Contains(point);
+  return hitBox.contains(point);
 }
 
 void Widget::tick(sf::RenderTarget *target) {

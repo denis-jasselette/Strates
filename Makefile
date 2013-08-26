@@ -1,7 +1,7 @@
 CXX := g++
 
 CXXFLAGS := -g -Wall
-LDFLAGS := -lm -lsfml-graphics -lsfml-system
+LDFLAGS := -lm -lsfml-graphics -lsfml-system -lsfml-window
 
 EXEC := a.out
 EXPORT := export.tar.gz

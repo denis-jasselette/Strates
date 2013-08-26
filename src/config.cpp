@@ -2,6 +2,8 @@
 #include <iostream>
 #include "config.h"
 
+sf::Font DEFAULT_FONT;
+
 /* FIXME: dirty hack to find the resource directory */
 static std::string resDir;
 static bool set = false;

@@ -21,7 +21,7 @@ Hud::~Hud() {
 void Hud::paint(sf::RenderTarget *target) {
   static int leftMargin = 2 * margin + actionWidth;
   static int rightMargin = 2 * margin + miniMapWidth;
-  int width = target->GetWidth() - leftMargin - rightMargin;
+  int width = target->getSize().x - leftMargin - rightMargin;
   statusPanel->setPosition(leftMargin, -margin, width);
 
   statusPanel->paint(target);

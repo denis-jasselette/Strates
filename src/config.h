@@ -1,6 +1,7 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -41,6 +42,8 @@
  * @return            the path to the file
  */
 std::string res_path(std::string basename);
+
+extern sf::Font DEFAULT_FONT;
 
 void log(const std::stringstream&);
 void log(const std::string);

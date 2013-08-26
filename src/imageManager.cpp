@@ -13,12 +13,12 @@ const sf::Texture *ImageManager::get(std::string name) {
     return value;
 
   sf::Texture *image = new sf::Texture();
-  if (!image->LoadFromFile(nameToFile(name))) {
+  if (!image->loadFromFile(nameToFile(name))) {
     log("Error: Loading of `" + name + "' failed");
     return NULL;
   }
 
-  image->SetSmooth(false);
+  image->setSmooth(false);
   pool[name] = image;
   return image;
 }

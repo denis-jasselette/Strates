@@ -4,9 +4,11 @@
 
 Application::Application() {
   setFullscreen(false);
-  window.EnableVerticalSync(true);
-  window.SetFramerateLimit(FRAMERATE_LIMIT);
-  window.EnableKeyRepeat(false);
+  window.setVerticalSyncEnabled(true);
+  window.setFramerateLimit(FRAMERATE_LIMIT);
+  window.setKeyRepeatEnabled(false);
+
+  DEFAULT_FONT.loadFromFile(res_path("arial.ttf"));
 
   imgMgr = new ImageManager();
   cursor = new Cursor(&window, imgMgr);
@@ -45,14 +47,14 @@ void Application::runScreens() {
 void Application::setFullscreen(bool value) {
   std::string title = "Strates";
   if (value) {
-    sf::VideoMode mode = sf::VideoMode::GetFullscreenModes()[0];
-    window.Create(mode, title, sf::Style::Fullscreen);
+    sf::VideoMode mode = sf::VideoMode::getFullscreenModes()[0];
+    window.create(mode, title, sf::Style::Fullscreen);
   }
   else {
-    sf::VideoMode mode = sf::VideoMode::GetDesktopMode();
-    window.Create(sf::VideoMode(800, 600, mode.BitsPerPixel), title);
+    sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+    window.create(sf::VideoMode(800, 600, mode.bitsPerPixel), title);
   }
-  window.ShowMouseCursor(false);
+  window.setMouseCursorVisible(false);
   isFullscreen = value;
 }
 

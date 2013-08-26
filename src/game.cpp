@@ -43,20 +43,20 @@ Game::~Game() {
 void Game::update() {
   int scrollSpeed = 6;
   sf::RenderWindow &window = *app->getWindow();
-  sf::View view = window.GetView();
-  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Left))
-    view.Move(-scrollSpeed, 0);
-  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Right))
-    view.Move(scrollSpeed, 0);
-  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Up))
-    view.Move(0, -scrollSpeed);
-  if (sf::Keyboard::IsKeyPressed(sf::Keyboard::Down))
-    view.Move(0, scrollSpeed);
+  sf::View view = window.getView();
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    view.move(-scrollSpeed, 0);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    view.move(scrollSpeed, 0);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    view.move(0, -scrollSpeed);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    view.move(0, scrollSpeed);
 
   sf::IntRect rect = viewGetRect(view);
   rect = map->clampViewRect(rect);
   viewSetRect(view, rect);
-  window.SetView(view);
+  window.setView(view);
 
   foglight->reset();
   sf::Vector2i coords = app->getCursorPosition();
@@ -74,9 +74,13 @@ void Game::select() {
   sf::Vector2i curPos = app->getCursorPosition();
   sf::Vector2i mapPos = map->viewToMapCoords(curPos);
   sf::IntRect rect = map->mapToViewRect(mapPos);
-  sf::Shape selection = sf::Shape::Rectangle(rect.Left + 1, rect.Top + 1, rect.Width - 2, rect.Height - 2, sf::Color::White, 1, sf::Color::Green);
-  selection.EnableFill(false);
-  app->getWindow()->Draw(selection);
+  sf::Vector2f size(rect.width - 2, rect.height - 2);
+  sf::RectangleShape selection(size);
+  selection.setPosition(rect.left + 1, rect.top + 1);
+  selection.setFillColor(sf::Color::Transparent);
+  selection.setOutlineColor(sf::Color::Green);
+  selection.setOutlineThickness(1);
+  app->getWindow()->draw(selection);
 }
 
 void Game::paint(sf::RenderTarget *target) {

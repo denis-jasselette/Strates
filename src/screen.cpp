@@ -3,8 +3,8 @@
 
 Screen::Screen(Application *app) : Widget() {
   this->app = app;
-  setWidth(app->getWindow()->GetWidth());
-  setHeight(app->getWindow()->GetHeight());
+  setWidth(app->getWindow()->getSize().x);
+  setHeight(app->getWindow()->getSize().y);
 }
 
 Screen::~Screen() {

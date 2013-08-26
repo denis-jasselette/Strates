@@ -13,15 +13,15 @@ ScreenID MenuScreen::run() {
   bool running = true;
   while (running) {
     sf::Event evt;
-    while (window.PollEvent(evt)) {
-      switch (evt.Type) {
+    while (window.pollEvent(evt)) {
+      switch (evt.type) {
         case sf::Event::Closed:
           log("Closed");
           running = false;
           break;
         case sf::Event::KeyReleased:
           log("KeyReleased");
-          switch (evt.Key.Code) {
+          switch (evt.key.code) {
             case sf::Keyboard::Escape:
             case sf::Keyboard::Q:
               running = false;
@@ -42,7 +42,7 @@ ScreenID MenuScreen::run() {
       break;
 
     tick(&window);
-    window.Display();
+    window.display();
   }
 
   return SCREEN_EXIT;

@@ -93,10 +93,10 @@ fail:
 }
 
 bool Map::rectEqual(sf::IntRect &a, sf::IntRect &b) {
-  return a.Left == b.Left
-    && a.Top == b.Top
-    && a.Width == b.Width
-    && a.Height == b.Height;
+  return a.left == b.left
+    && a.top == b.top
+    && a.width == b.width
+    && a.height == b.height;
 }
 
 void Map::refresh() {
@@ -105,20 +105,20 @@ void Map::refresh() {
 
 bool Map::needsCacheRefresh(sf::IntRect &paintRect) {
   return forceRefresh
-    || renderedRect.Left > paintRect.Left
-    || renderedRect.Top > paintRect.Top
-    || renderedRect.Left + renderedRect.Width < paintRect.Left + paintRect.Width
-    || renderedRect.Top + renderedRect.Height < paintRect.Top + paintRect.Height;
+    || renderedRect.left > paintRect.left
+    || renderedRect.top > paintRect.top
+    || renderedRect.left + renderedRect.width < paintRect.left + paintRect.width
+    || renderedRect.top + renderedRect.height < paintRect.top + paintRect.height;
 }
 
 void Map::checkCacheSize(sf::IntRect &paintRect) {
-  if (renderedRect.Width < paintRect.Width + 1
-      || renderedRect.Height < paintRect.Height + 1)
+  if (renderedRect.width < paintRect.width + 1
+      || renderedRect.height < paintRect.height + 1)
   {
-    renderedRect.Width = paintRect.Width + 2;
-    renderedRect.Height = paintRect.Height + 2;
-    render->Create(renderedRect.Width * tileMap->getTileWidth(),
-        renderedRect.Height * tileMap->getTileHeight());
+    renderedRect.width = paintRect.width + 2;
+    renderedRect.height = paintRect.height + 2;
+    render->create(renderedRect.width * tileMap->getTileWidth(),
+        renderedRect.height * tileMap->getTileHeight());
   }
 }
 
@@ -129,26 +129,26 @@ void Map::refreshCache(sf::IntRect &paintRect) {
   forceRefresh = false;
   checkCacheSize(paintRect);
 
-  render->Clear(sf::Color(0, 0, 0, 0));
-  sf::Vector2i orig(paintRect.Left, paintRect.Top);
-  renderedRect.Left = paintRect.Left;
-  renderedRect.Top = paintRect.Top;
+  render->clear(sf::Color(0, 0, 0, 0));
+  sf::Vector2i orig(paintRect.left, paintRect.top);
+  renderedRect.left = paintRect.left;
+  renderedRect.top = paintRect.top;
   paint(render, renderedRect, orig);
-  render->Display();
+  render->display();
 }
 
 void Map::paint(sf::RenderTarget *target) {
-  sf::View targetView = target->GetView();
+  sf::View targetView = target->getView();
   sf::IntRect targetRect = viewGetRect(targetView);
   sf::IntRect paintRect = viewToMapRect(targetRect);
 
 #if CACHE_RENDER
   refreshCache(paintRect);
 
-  sf::Sprite sprite(render->GetTexture());
-  sf::Vector2i mapCoords(renderedRect.Left, renderedRect.Top);
-  sprite.SetPosition((sf::Vector2f) mapToViewCoords(mapCoords));
-  target->Draw(sprite);
+  sf::Sprite sprite(render->getTexture());
+  sf::Vector2i mapCoords(renderedRect.left, renderedRect.top);
+  sprite.setPosition((sf::Vector2f) mapToViewCoords(mapCoords));
+  target->draw(sprite);
 #else
   paint(target, paintRect);
 #endif
@@ -158,26 +158,26 @@ void Map::paint(sf::RenderTarget *target,
     const sf::IntRect &paintRect,
     const sf::Vector2i &targetOrig)
 {
-  for (int i = 0; i < paintRect.Height; i++) {
-    for (int j = 0; j < paintRect.Width; j++) {
-      sf::Vector2i mapCoords(j + paintRect.Left, i + paintRect.Top);
+  for (int i = 0; i < paintRect.height; i++) {
+    for (int j = 0; j < paintRect.width; j++) {
+      sf::Vector2i mapCoords(j + paintRect.left, i + paintRect.top);
       if (!contains(mapCoords.x, mapCoords.y))
         continue;
 
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);
       sf::Vector2i pos = mapCoords - targetOrig;
-      sprite->SetPosition(sf::Vector2f(mapToViewCoords(pos)));
-      target->Draw(*sprite);
+      sprite->setPosition(sf::Vector2f(mapToViewCoords(pos)));
+      target->draw(*sprite);
     }
   }
 }
 
 sf::IntRect Map::clampViewRect(const sf::IntRect &rect) {
   sf::IntRect clamped = rect;
-  clamped.Width = std::min(rect.Width, viewRect.Width);
-  clamped.Height = std::min(rect.Height, viewRect.Height);
-  clamped.Left = clamp(rect.Left, viewRect.Left, viewRect.Left + viewRect.Width - rect.Width);
-  clamped.Top = clamp(rect.Top, viewRect.Top, viewRect.Top + viewRect.Height - rect.Height);
+  clamped.width = std::min(rect.width, viewRect.width);
+  clamped.height = std::min(rect.height, viewRect.height);
+  clamped.left = clamp(rect.left, viewRect.left, viewRect.left + viewRect.width - rect.width);
+  clamped.top = clamp(rect.top, viewRect.top, viewRect.top + viewRect.height - rect.height);
   return clamped;
 }
 
@@ -190,10 +190,10 @@ sf::Vector2i Map::viewToMapCoords(sf::Vector2i &coords) {
 sf::IntRect Map::viewToMapRect(sf::IntRect &view) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
-  int left = view.Left / w;
-  int top = view.Top / h;
-  int right = (view.Left + view.Width - 1) / w;
-  int bottom = (view.Top + view.Height - 1) / h;
+  int left = view.left / w;
+  int top = view.top / h;
+  int right = (view.left + view.width - 1) / w;
+  int bottom = (view.top + view.height - 1) / h;
   int width = right - left + 1;
   int height = bottom - top + 1;
   return sf::IntRect(left, top, width, height);

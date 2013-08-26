@@ -46,12 +46,12 @@ void Entity::paint(sf::RenderTarget *target) {
   if (!sprite)
     return;
 
-  sprite->SetPosition((sf::Vector2f) map->mapToViewCoords(position));
-  target->Draw(*sprite);
+  sprite->setPosition((sf::Vector2f) map->mapToViewCoords(position));
+  target->draw(*sprite);
 }
 
 void Entity::loadSprite(ImageManager *imgMgr, const std::string &name) {
   const sf::Texture *src = imgMgr->get(name);
   sprite = new sf::Sprite(*src);
-  sprite->SetSubRect(spriteRect);
+  sprite->setTextureRect(spriteRect);
 }

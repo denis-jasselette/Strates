@@ -16,10 +16,10 @@ Cursor::~Cursor() {
 }
 
 void Cursor::refreshPosition() {
-  int w = window->GetWidth();
-  int h = window->GetHeight();
+  int w = window->getSize().x;
+  int h = window->getSize().y;
 
-  position = sf::Mouse::GetPosition(*window);
+  position = sf::Mouse::getPosition(*window);
   position.x = clamp(position.x, 0, w - 1);
   position.y = clamp(position.y, 0, h - 1);
 }
@@ -29,12 +29,12 @@ sf::Vector2i Cursor::getPosition() {
 }
 
 sf::Vector2f Cursor::getViewPosition() {
-  return window->ConvertCoords(position.x, position.y);
+  return window->mapPixelToCoords(position);
 }
 
 void Cursor::paint() {
   refreshPosition();
   sf::Vector2f viewPos = getViewPosition();
-  sprite->SetPosition(viewPos.x, viewPos.y);
-  window->Draw(*sprite);
+  sprite->setPosition(viewPos.x, viewPos.y);
+  window->draw(*sprite);
 }
