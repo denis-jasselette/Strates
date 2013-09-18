@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "JSON/JSON.h"
 #include "config.h"
 #include "imageManager.h"
 #include "map.h"
@@ -22,10 +23,7 @@ class Entity {
      * @param size           the number of cells this Entity occupies
      *                       vertically and horizontally
      */
-    Entity(const std::string &className,
-        const std::string &displayName,
-        const sf::IntRect &spriteRect,
-        int size);
+    Entity(const std::string &className, JSONObject properties);
 
     /**
      * Copy constructor.
@@ -71,11 +69,9 @@ class Entity {
     Map *map;
     std::string className;
     //TODO: reference the owner player
-    std::string displayName;
-    sf::IntRect spriteRect;
-    int size;
+    JSONObject properties;
     sf::Vector2i position;
-    sf::Sprite *sprite;
+    const sf::Texture *texture;
 
     void loadSprite(ImageManager *imgMgr, const std::string &name);
 };

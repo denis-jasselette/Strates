@@ -34,7 +34,7 @@ class TechTree {
      *
      * @return          a pointer to the constructed TechTree
      */
-    static TechTree *fromJSONObject(const JSONObject &tree, ImageManager *imgMgr);
+    static TechTree *fromJSONObject(JSONValue *tree, ImageManager *imgMgr);
 
     /**
      * Destructor.
@@ -63,10 +63,11 @@ class TechTree {
     typedef std::map<std::string, const Unit*> UnitMap;
     typedef std::map<std::string, const Building*> BuildingMap;
 
+    JSONValue *tree;
     UnitMap units;
     BuildingMap buildings;
 
-    TechTree();
+    TechTree(JSONValue *tree);
 
     static std::string wstrToStr(const std::wstring &wstr);
 };

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "techTree.h"
 
-TechTree::TechTree() {
+TechTree::TechTree(JSONValue *tree) : tree(tree) {
   // nothing to do here, just makes the default constructor private
 }
 
@@ -13,6 +13,8 @@ TechTree::~TechTree() {
   BuildingMap::const_iterator bit;
   for (bit = buildings.begin(); bit != buildings.end(); bit++)
     delete bit->second;
+
+  delete tree;
 }
 
 const Entity *TechTree::getEntity(std::string name) {
@@ -57,16 +59,19 @@ TechTree *TechTree::fromFile(std::string filename,
     return NULL;
   }
 
-  TechTree *that = fromJSONObject(tree->AsObject(), imgMgr);
-  delete tree;
+  TechTree *that = fromJSONObject(tree, imgMgr);
 
   return that;
 }
 
-TechTree *TechTree::fromJSONObject(const JSONObject &tree,
+/* A tech-tree is divided into a subtree for buildings, units and upgrades.
+ * Each subtree has objects as direct children, each object has a className
+ * identifying it and a list of properties. */
+TechTree *TechTree::fromJSONObject(JSONValue *tree_value,
     ImageManager *imgMgr)
 {
-  TechTree *that = new TechTree();
+  const JSONObject tree = tree_value->AsObject();
+  TechTree *that = new TechTree(tree_value);
 
   JSONObject::const_iterator tree_it;
   for (tree_it = tree.begin(); tree_it != tree.end(); tree_it++) {
@@ -76,30 +81,24 @@ TechTree *TechTree::fromJSONObject(const JSONObject &tree,
     JSONObject::const_iterator it;
     for (it = obj.begin(); it != obj.end(); it++) {
       const std::string &className = wstrToStr(it->first);
-      const JSONObject &content = it->second->AsObject();
-      const std::wstring &displayName = content.find(L"displayName")->second->AsString();
-      const JSONArray &rectVect = content.find(L"spriteRect")->second->AsArray();
-      int size = content.find(L"size")->second->AsNumber();
-
-      sf::IntRect spriteRect(rectVect[0]->AsNumber(), rectVect[1]->AsNumber(),
-          rectVect[2]->AsNumber(), rectVect[3]->AsNumber());
+      const JSONObject &properties = it->second->AsObject();
 
       if (type == "units") {
         that->units[className] = new Unit(className,
-            wstrToStr(displayName),
-            spriteRect,
-            size,
+            properties,
             imgMgr);
       }
       else if (type == "buildings") {
         that->buildings[className] = new Building(className,
-            wstrToStr(displayName),
-            spriteRect,
-            size,
+            properties,
             imgMgr);
       }
-      else
-        break;
+      else if (type == "upgrades") {
+        // TODO: support this
+      }
+      else {
+        log("Unknown type found in tech tree");
+      }
     }
   }
 

@@ -21,9 +21,7 @@ class Building : public Entity {
      *                       retrieved
      */
     Building(const std::string &className,
-        const std::string &displayName,
-        const sf::IntRect &spriteRect,
-        int size,
+        JSONObject properties,
         ImageManager *imgMgr);
 };
 
