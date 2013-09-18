@@ -18,23 +18,19 @@ class TechTree {
      * Constructs a TechTree from a resource file.
      *
      * @param filename    the name of the resource file
-     * @param imgMgr      a pointer to the ImageManager from which Entity
-     *                    Texture's are retrieved
      *
      * @return            a pointer to the constructed TechTree
      */
-    static TechTree *fromFile(std::string filename, ImageManager *imgMgr);
+    static TechTree *fromFile(std::string filename);
 
     /**
      * Constructs a TechTree from a JSONObject.
      *
      * @param tree      the source JSONObject
-     * @param imgMgr    a pointer to the ImageManager from which Entity
-     *                  Texture's are retrieved
      *
      * @return          a pointer to the constructed TechTree
      */
-    static TechTree *fromJSONObject(JSONValue *tree, ImageManager *imgMgr);
+    static TechTree *fromJSONObject(JSONValue *tree);
 
     /**
      * Destructor.

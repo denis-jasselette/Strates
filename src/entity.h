@@ -58,12 +58,14 @@ class Entity {
      */
     void setMap(Map *map);
 
+    void setTexture(const sf::Texture *texture);
+
     /**
      * Paints this Entity on a RenderTarget
      *
      * @param target    the destination RenderTarget
      */
-    void paint(sf::RenderTarget *target);
+    void paint(sf::RenderTarget *target, sf::Color color);
 
   protected:
     Map *map;
@@ -72,8 +74,6 @@ class Entity {
     JSONObject properties;
     sf::Vector2i position;
     const sf::Texture *texture;
-
-    void loadSprite(ImageManager *imgMgr, const std::string &name);
 };
 
 #endif /* _ENTITY_H_ */

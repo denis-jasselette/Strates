@@ -1,9 +1,7 @@
 #include "unit.h"
 
 Unit::Unit(const std::string &className,
-    JSONObject properties,
-    ImageManager *imgMgr) :
+    JSONObject properties) :
   Entity(className, properties)
 {
-  loadSprite(imgMgr, "units");
 }

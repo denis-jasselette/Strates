@@ -31,7 +31,11 @@ void Entity::setPosition(const sf::Vector2i &position) {
   this->position = position;
 }
 
-void Entity::paint(sf::RenderTarget *target) {
+void Entity::setTexture(const sf::Texture *texture) {
+  this->texture = texture;
+}
+
+void Entity::paint(sf::RenderTarget *target, sf::Color color) {
   const JSONArray &rectVect = properties.find(L"spriteRect")->second->AsArray();
   sf::IntRect spriteRect(rectVect[0]->AsNumber(), rectVect[1]->AsNumber(),
             rectVect[2]->AsNumber(), rectVect[3]->AsNumber());
@@ -39,8 +43,4 @@ void Entity::paint(sf::RenderTarget *target) {
 
   sprite.setPosition((sf::Vector2f) map->mapToViewCoords(position));
   target->draw(sprite);
-}
-
-void Entity::loadSprite(ImageManager *imgMgr, const std::string &name) {
-  texture = imgMgr->get(name);
 }

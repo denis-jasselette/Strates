@@ -19,7 +19,7 @@ class Player {
      * @param techTree    a pointer to the TechTree
      * @param map         a pointer to the Map
      */
-    Player(std::string name, TechTree *techTree, Map *map);
+    Player(std::string name, TechTree *techTree, Map *map, sf::Color color, ImageManager *imgMgr);
 
     /**
      * Destructor.
@@ -60,7 +60,11 @@ class Player {
     std::string name;
     TechTree *techTree;
     Map *map;
+    sf::Color color;
+    sf::Texture *sprite_sheet;
     std::vector<Entity*> entities;
+
+    void loadSpriteSheet(ImageManager *imgMgr);
 };
 
 #endif /* _PLAYER_H_ */

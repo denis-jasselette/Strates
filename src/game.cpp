@@ -8,11 +8,11 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
   this->app = app;
 
   radius = 3;
-  techTree = TechTree::fromFile(res_path("techtree.json"), app->getImgMgr());
+  techTree = TechTree::fromFile(res_path("techtree.json"));
   map = Map::fromFile(res_path("map"), app->getImgMgr());
 
-  players.push_back(new Player("Raymond", techTree, map));
-  players.push_back(new Player("Jean-Pierre", techTree, map));
+  players.push_back(new Player("Raymond", techTree, map, sf::Color::Red, app->getImgMgr()));
+  players.push_back(new Player("Jean-Pierre", techTree, map, sf::Color::Blue, app->getImgMgr()));
 
   fogTileMap = new TileMap("fow", app->getImgMgr());
   fog = new FoW(map, fogTileMap);

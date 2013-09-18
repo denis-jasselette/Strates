@@ -2,7 +2,7 @@
   "units": {
     "worker": {
       "displayName": "Worker",
-      "spriteRect": [ 0, 0, 32, 32 ],
+      "spriteRect": [ 0, 97, 32, 32 ],
       "size": 1,
       "cost": {
         "gold": 40
@@ -17,7 +17,7 @@
     },
     "infantry": {
       "displayName": "Infantry",
-      "spriteRect": [ 33, 0, 32, 32 ],
+      "spriteRect": [ 33, 97, 32, 32 ],
       "size": 1,
       "cost": {
         "gold": 60
@@ -32,7 +32,7 @@
     },
     "archer": {
       "displayName": "Archer",
-      "spriteRect": [ 66, 0, 32, 32 ],
+      "spriteRect": [ 66, 97, 32, 32 ],
       "size": 1,
       "cost": {
         "gold": 40,

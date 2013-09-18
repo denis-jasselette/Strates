@@ -17,12 +17,9 @@ class Unit : public Entity {
      *                       Entity in a Texture
      * @param size           the number of cells this Entity occupies
      *                       vertically and horizontally
-     * @param imgMgr         the ImageManager from which the Texture is
-     *                       retrieved
      */
     Unit(const std::string &className,
-        JSONObject properties,
-        ImageManager *imgMgr);
+        JSONObject properties);
 };
 
 #endif /* _UNIT_H_ */

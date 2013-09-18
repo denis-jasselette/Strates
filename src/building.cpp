@@ -1,9 +1,7 @@
 #include "building.h"
 
 Building::Building(const std::string &className,
-    JSONObject properties,
-    ImageManager *imgMgr) :
+    JSONObject properties) :
   Entity(className, properties)
 {
-  loadSprite(imgMgr, "buildings");
 }

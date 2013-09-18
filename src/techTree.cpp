@@ -41,8 +41,7 @@ std::string TechTree::wstrToStr(const std::wstring &wstr) {
   return std::string(wstr.begin(), wstr.end());
 }
 
-TechTree *TechTree::fromFile(std::string filename,
-    ImageManager *imgMgr)
+TechTree *TechTree::fromFile(std::string filename)
 {
   std::wifstream in(filename.c_str());
 
@@ -59,7 +58,7 @@ TechTree *TechTree::fromFile(std::string filename,
     return NULL;
   }
 
-  TechTree *that = fromJSONObject(tree, imgMgr);
+  TechTree *that = fromJSONObject(tree);
 
   return that;
 }
@@ -67,8 +66,7 @@ TechTree *TechTree::fromFile(std::string filename,
 /* A tech-tree is divided into a subtree for buildings, units and upgrades.
  * Each subtree has objects as direct children, each object has a className
  * identifying it and a list of properties. */
-TechTree *TechTree::fromJSONObject(JSONValue *tree_value,
-    ImageManager *imgMgr)
+TechTree *TechTree::fromJSONObject(JSONValue *tree_value)
 {
   const JSONObject tree = tree_value->AsObject();
   TechTree *that = new TechTree(tree_value);
@@ -84,14 +82,10 @@ TechTree *TechTree::fromJSONObject(JSONValue *tree_value,
       const JSONObject &properties = it->second->AsObject();
 
       if (type == "units") {
-        that->units[className] = new Unit(className,
-            properties,
-            imgMgr);
+        that->units[className] = new Unit(className, properties);
       }
       else if (type == "buildings") {
-        that->buildings[className] = new Building(className,
-            properties,
-            imgMgr);
+        that->buildings[className] = new Building(className, properties);
       }
       else if (type == "upgrades") {
         // TODO: support this
