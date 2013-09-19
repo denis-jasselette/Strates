@@ -50,6 +50,10 @@ void Player::addEntity(Entity *ent, sf::Vector2i pos) {
   entities.push_back(ent);
 }
 
+std::vector<Entity*> Player::getEntities() {
+  return entities;
+}
+
 void Player::update() {
 }
 

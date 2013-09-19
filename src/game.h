@@ -54,16 +54,21 @@ class Game : public Widget {
      */
     void setRadius(int radius);
 
+    Entity *findEntityAt(sf::Vector2i coords) const;
+
+    void setSelection(Entity *entity);
+
     bool onMousePressed(const Event &evt);
 
   private:
-    void select();
+    void paintSelection(sf::RenderTarget *target) const;
 
     Application *app;
     int radius;
     TechTree *techTree;
     Map *map;
     std::vector<Player*> players;
+    std::vector<Entity*> selection;
     TileMap *fogTileMap;
     FoW *fog, *foglight;
 };

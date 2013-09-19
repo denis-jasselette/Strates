@@ -3,6 +3,7 @@
 #include "config.h"
 #include "game.h"
 #include "utils.h"
+#include "mouseEvent.h"
 
 Game::Game(Application *app, Widget *parent) : Widget(parent) {
   this->app = app;
@@ -24,7 +25,18 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
 }
 
 bool Game::onMousePressed(const Event &evt) {
-  log("received event");
+  log("Click!");
+
+  const MouseEvent &e = (const MouseEvent&) evt;
+  const sf::Vector2i &pos = e.getPosition();
+  sf::Vector2i coords = app->mapPixelToCoords(pos);
+  sf::Vector2i map_coords = map->viewToMapCoords(coords);
+
+  if (e.getButton() == MouseEvent::BUTTON1) {
+    Entity *entity = findEntityAt(map_coords);
+    setSelection(entity);
+  }
+
   return true;
 }
 
@@ -70,17 +82,47 @@ void Game::update() {
   repaint();
 }
 
-void Game::select() {
-  sf::Vector2i curPos = app->getCursorPosition();
-  sf::Vector2i mapPos = map->viewToMapCoords(curPos);
-  sf::IntRect rect = map->mapToViewRect(mapPos);
-  sf::Vector2f size(rect.width - 2, rect.height - 2);
-  sf::RectangleShape selection(size);
-  selection.setPosition(rect.left + 1, rect.top + 1);
-  selection.setFillColor(sf::Color::Transparent);
-  selection.setOutlineColor(sf::Color::Green);
-  selection.setOutlineThickness(1);
-  app->getWindow()->draw(selection);
+Entity *Game::findEntityAt(sf::Vector2i coords) const {
+  std::vector<Player*>::const_iterator it;
+  for (it = players.begin(); it != players.end(); it++) {
+    std::vector<Entity*> entities = (*it)->getEntities();
+    std::vector<Entity*>::const_iterator ent;
+    for (ent = entities.begin(); ent != entities.end(); ent++) {
+      sf::Vector2i pos = (*ent)->getPosition();
+      int size = (*ent)->getProperty(L"size")->AsNumber();
+      if (pos.x <= coords.x && coords.x < pos.x + size &&
+          pos.y <= coords.y && coords.y < pos.y + size)
+      {
+        return *ent;
+      }
+    }
+  }
+
+  return NULL;
+}
+
+void Game::setSelection(Entity *entity) {
+  selection.clear();
+  if (entity)
+    selection.push_back(entity);
+}
+
+void Game::paintSelection(sf::RenderTarget *target) const {
+  std::vector<Entity*>::const_iterator it;
+  for (it = selection.begin(); it != selection.end(); it++) {
+    int size = (*it)->getProperty(L"size")->AsNumber();
+    sf::Vector2i mapPos = (*it)->getPosition();
+    sf::IntRect rect = map->mapToViewRect(mapPos);
+    rect.width *= size;
+    rect.height *= size;
+    sf::Vector2f rect_size(rect.width - 2, rect.height - 2);
+    sf::RectangleShape shape(rect_size);
+    shape.setPosition(rect.left + 1, rect.top + 1);
+    shape.setFillColor(sf::Color::Transparent);
+    shape.setOutlineColor(sf::Color::Green);
+    shape.setOutlineThickness(1);
+    target->draw(shape);
+  }
 }
 
 void Game::paint(sf::RenderTarget *target) {
@@ -90,9 +132,9 @@ void Game::paint(sf::RenderTarget *target) {
   for (it = players.begin(); it != players.end(); it++)
     (*it)->paint(target);
 
+  paintSelection(target);
   foglight->paint(target);
   fog->paint(target);
-  select();
 }
 
 int Game::getRadius() {

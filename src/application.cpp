@@ -77,3 +77,7 @@ Cursor *Application::getCursor() {
 sf::Vector2i Application::getCursorPosition() {
   return (sf::Vector2i) cursor->getViewPosition();
 }
+
+sf::Vector2i Application::mapPixelToCoords(const sf::Vector2i &pixel) {
+  return (sf::Vector2i) window.mapPixelToCoords(pixel);
+}

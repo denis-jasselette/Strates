@@ -53,7 +53,7 @@ class Map {
      *
      * @return          the position in Map coordinates
      */
-    sf::Vector2i viewToMapCoords(sf::Vector2i &coords);
+    sf::Vector2i viewToMapCoords(const sf::Vector2i &coords);
 
     /**
      * Converts an IntRect in View coordinates to an IntRect in Map
@@ -63,7 +63,7 @@ class Map {
      *
      * @return            the IntRect in Map coordinates
      */
-    sf::IntRect viewToMapRect(sf::IntRect &viewRect);
+    sf::IntRect viewToMapRect(const sf::IntRect &viewRect);
 
     /**
      * Converts a position in Map coordinates to a position in View
@@ -73,7 +73,7 @@ class Map {
      *
      * @return          the position in View coordinates
      */
-    sf::Vector2i mapToViewCoords(sf::Vector2i &coords);
+    sf::Vector2i mapToViewCoords(const sf::Vector2i &coords);
 
     /**
      * Converts an IntRect in Map coordinates to an IntRect in View
@@ -83,7 +83,7 @@ class Map {
      *
      * @return            the IntRect in View coordinates
      */
-    sf::IntRect mapToViewRect(sf::Vector2i &coords);
+    sf::IntRect mapToViewRect(const sf::Vector2i &coords);
 
     /**
      * Returns whether a position in Map coordinates is contained in the Map.

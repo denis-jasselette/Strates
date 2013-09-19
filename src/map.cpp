@@ -181,13 +181,13 @@ sf::IntRect Map::clampViewRect(const sf::IntRect &rect) {
   return clamped;
 }
 
-sf::Vector2i Map::viewToMapCoords(sf::Vector2i &coords) {
+sf::Vector2i Map::viewToMapCoords(const sf::Vector2i &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   return sf::Vector2i(coords.x / w, coords.y / h);
 }
 
-sf::IntRect Map::viewToMapRect(sf::IntRect &view) {
+sf::IntRect Map::viewToMapRect(const sf::IntRect &view) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   int left = view.left / w;
@@ -199,13 +199,13 @@ sf::IntRect Map::viewToMapRect(sf::IntRect &view) {
   return sf::IntRect(left, top, width, height);
 }
 
-sf::Vector2i Map::mapToViewCoords(sf::Vector2i &coords) {
+sf::Vector2i Map::mapToViewCoords(const sf::Vector2i &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   return sf::Vector2i(coords.x * w, coords.y * h);
 }
 
-sf::IntRect Map::mapToViewRect(sf::Vector2i &coords) {
+sf::IntRect Map::mapToViewRect(const sf::Vector2i &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   return sf::IntRect(coords.x * w, coords.y * h, w, h);

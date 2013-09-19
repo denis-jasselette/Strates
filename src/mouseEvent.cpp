@@ -27,10 +27,10 @@ bool MouseEvent::shouldPropagate(Widget *widget) const {
   return widget->contains(position);
 }
 
-int MouseEvent::getButton() {
+int MouseEvent::getButton() const {
   return button;
 }
 
-const sf::Vector2i &MouseEvent::getPosition() {
+const sf::Vector2i &MouseEvent::getPosition() const {
   return position;
 }

@@ -35,6 +35,10 @@ void Entity::setTexture(const sf::Texture *texture) {
   this->texture = texture;
 }
 
+const JSONValue *Entity::getProperty(const std::wstring &name) {
+  return properties.find(name)->second;
+}
+
 void Entity::paint(sf::RenderTarget *target, sf::Color color) {
   const JSONArray &rectVect = properties.find(L"spriteRect")->second->AsArray();
   sf::IntRect spriteRect(rectVect[0]->AsNumber(), rectVect[1]->AsNumber(),

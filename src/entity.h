@@ -60,6 +60,8 @@ class Entity {
 
     void setTexture(const sf::Texture *texture);
 
+    const JSONValue *getProperty(const std::wstring &name);
+
     /**
      * Paints this Entity on a RenderTarget
      *

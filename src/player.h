@@ -42,6 +42,8 @@ class Player {
      */
     void addEntity(Entity *ent, sf::Vector2i pos);
 
+    std::vector<Entity*> getEntities();
+
     /**
      * Updates the status of the Player.
      *

@@ -77,6 +77,8 @@ class Application {
      */
     sf::Vector2i getCursorPosition();
 
+    sf::Vector2i mapPixelToCoords(const sf::Vector2i &pixel);
+
   private:
     sf::RenderWindow window;
     std::vector<Screen*> screens;

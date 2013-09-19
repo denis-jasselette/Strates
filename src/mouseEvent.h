@@ -20,8 +20,8 @@ class MouseEvent : public Event {
 
     Event::Type getType() const;
     bool shouldPropagate(Widget *widget) const;
-    int getButton();
-    const sf::Vector2i &getPosition();
+    int getButton() const;
+    const sf::Vector2i &getPosition() const;
 
   protected:
     MouseType type;
