@@ -133,7 +133,7 @@ void GameScreen::onMouseWheelMoved(sf::Event &evt) {
 
 void GameScreen::onMouseButtonPressed(sf::Event &evt) {
   int button;
-  sf::Vector2i coords = app->getCursorPosition();
+  sf::Vector2i coords = app->getCursor()->getPosition();
 
   switch (evt.mouseButton.button) {
     case sf::Mouse::Left:
