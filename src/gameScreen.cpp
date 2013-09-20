@@ -66,6 +66,43 @@ void GameScreen::exit() {
 }
 
 void GameScreen::update() {
+  const int SCROLL_AREA_SIZE = 5;
+  const float SCROLL_SPEED = 12;
+
+  sf::Vector2f scroll;
+  sf::Vector2i coords = app->getCursor()->getPosition();
+  if (coords.x < SCROLL_AREA_SIZE)
+    scroll.x = -1;
+  else if (coords.x >= hitBox.width - SCROLL_AREA_SIZE)
+    scroll.x = 1;
+  else
+    scroll.x = 0;
+
+  if (coords.y < SCROLL_AREA_SIZE)
+    scroll.y = -1;
+  else if (coords.y >= hitBox.height - SCROLL_AREA_SIZE)
+    scroll.y = 1;
+  else
+    scroll.y = 0;
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    scroll.x = -1;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    scroll.x = 1;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    scroll.y = -1;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    scroll.y = 1;
+
+  sf::RenderWindow &window = *app->getWindow();
+  sf::View view = window.getView();
+  view.move(SCROLL_SPEED * scroll);
+
+  sf::IntRect rect = viewGetRect(view);
+  rect = game->getMap()->clampViewRect(rect);
+  viewSetRect(view, rect);
+  window.setView(view);
+
   game->update();
   repaint();
 }
@@ -104,6 +141,10 @@ void GameScreen::tick(sf::RenderTarget *target) {
 void GameScreen::onResized(sf::Event &evt) {
   sf::RenderWindow &window = *app->getWindow();
   sf::View view = window.getView();
+  setWidth(evt.size.width);
+  setHeight(evt.size.height);
+  game->setWidth(evt.size.width);
+  game->setHeight(evt.size.height);
   view.setSize(evt.size.width, evt.size.height);
   window.setView(view);
 }

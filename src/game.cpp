@@ -53,23 +53,6 @@ Game::~Game() {
 }
 
 void Game::update() {
-  int scrollSpeed = 6;
-  sf::RenderWindow &window = *app->getWindow();
-  sf::View view = window.getView();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    view.move(-scrollSpeed, 0);
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    view.move(scrollSpeed, 0);
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-    view.move(0, -scrollSpeed);
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    view.move(0, scrollSpeed);
-
-  sf::IntRect rect = viewGetRect(view);
-  rect = map->clampViewRect(rect);
-  viewSetRect(view, rect);
-  window.setView(view);
-
   foglight->reset();
   sf::Vector2i coords = app->getCursorPosition();
   fog->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
@@ -143,4 +126,8 @@ int Game::getRadius() {
 
 void Game::setRadius(int radius) {
   this->radius = radius;
+}
+
+Map *Game::getMap() {
+  return map;
 }

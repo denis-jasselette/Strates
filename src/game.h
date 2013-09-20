@@ -54,6 +54,8 @@ class Game : public Widget {
      */
     void setRadius(int radius);
 
+    Map *getMap();
+
     Entity *findEntityAt(sf::Vector2i coords) const;
 
     void setSelection(Entity *entity);
