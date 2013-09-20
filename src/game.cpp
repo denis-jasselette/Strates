@@ -11,13 +11,12 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
   radius = 3;
   techTree = TechTree::fromFile(res_path("techtree.json"));
   map = Map::fromFile(res_path("map"), app->getImgMgr());
-
-  players.push_back(new Player("Raymond", techTree, map, sf::Color::Red, app->getImgMgr()));
-  players.push_back(new Player("Jean-Pierre", techTree, map, sf::Color::Blue, app->getImgMgr()));
-
   fogTileMap = new TileMap("fow", app->getImgMgr());
-  fog = new FoW(map, fogTileMap);
-  foglight = new FoW(map, fogTileMap, FoW::LIGHT);
+
+  players.push_back(new Player("Raymond", techTree, map, fogTileMap, sf::Color::Red, app->getImgMgr()));
+  players.push_back(new Player("Jean-Pierre", techTree, map, fogTileMap, sf::Color::Blue, app->getImgMgr()));
+
+  focusedPlayer = players[0];
 
   EventCallback *func;
   func = new EventMethodCallback<Game>(this, &Game::onMousePressed);
@@ -47,17 +46,10 @@ Game::~Game() {
 
   delete techTree;
   delete map;
-  delete fog;
-  delete foglight;
   delete fogTileMap;
 }
 
 void Game::update() {
-  foglight->reset();
-  sf::Vector2i coords = app->getCursorPosition();
-  fog->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
-  foglight->set(map->viewToMapCoords(coords), radius, FoW::REVEALED);
-
   std::vector<Player*>::iterator it;
   for (it = players.begin(); it != players.end(); it++)
     (*it)->update();
@@ -116,8 +108,7 @@ void Game::paint(sf::RenderTarget *target) {
     (*it)->paint(target);
 
   paintSelection(target);
-  foglight->paint(target);
-  fog->paint(target);
+  focusedPlayer->paintFoW(target);
 }
 
 int Game::getRadius() {

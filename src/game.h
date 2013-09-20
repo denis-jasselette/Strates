@@ -8,7 +8,6 @@
 #include "map.h"
 #include "player.h"
 #include "tileMap.h"
-#include "fow.h"
 
 /**
  * Handles the Player's and Map of a game.
@@ -70,9 +69,9 @@ class Game : public Widget {
     TechTree *techTree;
     Map *map;
     std::vector<Player*> players;
+    Player *focusedPlayer;
     std::vector<Entity*> selection;
     TileMap *fogTileMap;
-    FoW *fog, *foglight;
 };
 
 #endif	/* _GAME_H_ */

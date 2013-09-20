@@ -1,12 +1,15 @@
 #include <iostream>
 #include "player.h"
 
-Player::Player(std::string name, TechTree *techTree, Map *map, sf::Color color, ImageManager *imgMgr) {
+Player::Player(std::string name, TechTree *techTree, Map *map, TileMap *fogTileMap, sf::Color color, ImageManager *imgMgr) {
   this->name = name;
   this->techTree = techTree;
   this->map = map;
   this->color = color;
   loadSpriteSheet(imgMgr);
+
+  fog = new FoW(map, fogTileMap);
+  foglight = new FoW(map, fogTileMap, FoW::LIGHT);
 
   static int move = 0;
   addEntity("worker", sf::Vector2i(3 + move, 5 + move));
@@ -20,6 +23,8 @@ Player::~Player() {
     delete *it;
 
   delete sprite_sheet;
+  delete fog;
+  delete foglight;
 }
 
 void Player::loadSpriteSheet(ImageManager *imgMgr) {
@@ -55,10 +60,29 @@ std::vector<Entity*> Player::getEntities() {
 }
 
 void Player::update() {
+  foglight->reset();
+  std::vector<Entity*>::iterator it;
+  for (it = entities.begin(); it != entities.end(); it++) {
+    int radius = (*it)->getProperty(L"visibility")->AsNumber();
+    sf::Vector2i pos = (*it)->getPosition();
+    int size = (*it)->getProperty(L"size")->AsNumber();
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        sf::Vector2i tile = pos + sf::Vector2i(i, j);
+        fog->set(tile, radius, FoW::REVEALED);
+        foglight->set(tile, radius, FoW::REVEALED);
+      }
+    }
+  }
 }
 
 void Player::paint(sf::RenderTarget *target) {
   std::vector<Entity*>::iterator it;
   for (it = entities.begin(); it != entities.end(); it++)
     (*it)->paint(target, color);
+}
+
+void Player::paintFoW(sf::RenderTarget *target) {
+  foglight->paint(target);
+  fog->paint(target);
 }

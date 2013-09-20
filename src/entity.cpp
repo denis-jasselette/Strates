@@ -36,7 +36,14 @@ void Entity::setTexture(const sf::Texture *texture) {
 }
 
 const JSONValue *Entity::getProperty(const std::wstring &name) {
-  return properties.find(name)->second;
+  JSONObject::iterator it = properties.find(name);
+  if (it == properties.end()) {
+    std::stringstream ss;
+    ss << "Property not found '" << std::string(name.begin(), name.end()) << "' for class '" << className << "'";
+    log(ss);
+  }
+
+  return it->second;
 }
 
 void Entity::paint(sf::RenderTarget *target, sf::Color color) {

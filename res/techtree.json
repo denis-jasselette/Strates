@@ -7,13 +7,11 @@
       "cost": {
         "gold": 40
       },
-      "properties": {
-        "hp": 60,
-        "attack": 5,
-        "range": 1,
-        "visibility": 4,
-        "speed": 2
-      }
+      "hp": 60,
+      "attack": 5,
+      "range": 1,
+      "visibility": 4,
+      "speed": 2
     },
     "infantry": {
       "displayName": "Infantry",
@@ -22,13 +20,11 @@
       "cost": {
         "gold": 60
       },
-      "properties": {
-        "hp": 120,
-        "attack": 20,
-        "range": 1,
-        "visibility": 3,
-        "speed": 1.5
-      }
+      "hp": 120,
+      "attack": 20,
+      "range": 1,
+      "visibility": 3,
+      "speed": 1.5
     },
     "archer": {
       "displayName": "Archer",
@@ -38,13 +34,11 @@
         "gold": 40,
         "wood": 20
       },
-      "properties": {
-        "hp": 100,
-        "attack": 15,
-        "range": 4,
-        "visibility": 4,
-        "speed": 1.5
-      },
+      "hp": 100,
+      "attack": 15,
+      "range": 4,
+      "visibility": 4,
+      "speed": 1.5,
       "requires": [ "forge" ]
     }
   },
@@ -57,10 +51,8 @@
         "gold": 1000,
         "wood": 1000
       },
-      "properties": {
-        "hp": 1200,
-        "visibility": 5
-      }
+      "hp": 1200,
+      "visibility": 5
     },
     "barracks": {
       "displayName": "Barracks",
@@ -70,10 +62,8 @@
         "gold": 300,
         "wood": 100
       },
-      "properties": {
-        "hp": 600,
-        "visibility": 5
-      }
+      "hp": 600,
+      "visibility": 5
     },
     "forge": {
       "displayName": "Forge",
@@ -83,10 +73,8 @@
         "gold": 200,
         "wood": 200
       },
-      "properties": {
-        "hp": 400,
-        "visibility": 5
-      }
+      "hp": 400,
+      "visibility": 5
     }
   },
   "upgrades": {

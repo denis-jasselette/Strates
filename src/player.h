@@ -6,6 +6,7 @@
 #include "techTree.h"
 #include "map.h"
 #include "entity.h"
+#include "fow.h"
 
 /**
  * Handles the units and buildings of a player.
@@ -19,7 +20,7 @@ class Player {
      * @param techTree    a pointer to the TechTree
      * @param map         a pointer to the Map
      */
-    Player(std::string name, TechTree *techTree, Map *map, sf::Color color, ImageManager *imgMgr);
+    Player(std::string name, TechTree *techTree, Map *map, TileMap *fogTileMap, sf::Color color, ImageManager *imgMgr);
 
     /**
      * Destructor.
@@ -58,10 +59,13 @@ class Player {
      */
     void paint(sf::RenderTarget *target);
 
+    void paintFoW(sf::RenderTarget *target);
+
   private:
     std::string name;
     TechTree *techTree;
     Map *map;
+    FoW *fog, *foglight;
     sf::Color color;
     sf::Texture *sprite_sheet;
     std::vector<Entity*> entities;
