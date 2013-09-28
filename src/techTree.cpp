@@ -34,7 +34,7 @@ Entity *TechTree::createEntity(std::string name) {
   if (ref == NULL)
     return NULL;
 
-  return new Entity(*ref);
+  return ref->clone();
 }
 
 std::string TechTree::wstrToStr(const std::wstring &wstr) {

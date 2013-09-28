@@ -20,6 +20,12 @@ class Building : public Entity {
      */
     Building(const std::string &className,
         JSONObject properties);
+
+    virtual Building *clone() const {
+      return new Building(*this);
+    }
+
+    virtual void defaultAction(const sf::Vector2i &coords);
 };
 
 #endif /* _BUILDING_H_ */

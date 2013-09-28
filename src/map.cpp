@@ -165,7 +165,7 @@ void Map::paint(sf::RenderTarget *target,
         continue;
 
       sf::Sprite *sprite = tileMap->get(tiles[mapCoords.y][mapCoords.x]);
-      sf::Vector2i pos = mapCoords - targetOrig;
+      sf::Vector2f pos(mapCoords - targetOrig);
       sprite->setPosition(sf::Vector2f(mapToViewCoords(pos)));
       target->draw(*sprite);
     }
@@ -179,6 +179,12 @@ sf::IntRect Map::clampViewRect(const sf::IntRect &rect) {
   clamped.left = clamp(rect.left, viewRect.left, viewRect.left + viewRect.width - rect.width);
   clamped.top = clamp(rect.top, viewRect.top, viewRect.top + viewRect.height - rect.height);
   return clamped;
+}
+
+sf::Vector2f Map::viewToMapFloatCoords(const sf::Vector2i &coords) {
+  float w = tileMap->getTileWidth();
+  float h = tileMap->getTileHeight();
+  return sf::Vector2f(coords.x / w, coords.y / h);
 }
 
 sf::Vector2i Map::viewToMapCoords(const sf::Vector2i &coords) {
@@ -199,13 +205,13 @@ sf::IntRect Map::viewToMapRect(const sf::IntRect &view) {
   return sf::IntRect(left, top, width, height);
 }
 
-sf::Vector2i Map::mapToViewCoords(const sf::Vector2i &coords) {
+sf::Vector2i Map::mapToViewCoords(const sf::Vector2f &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   return sf::Vector2i(coords.x * w, coords.y * h);
 }
 
-sf::IntRect Map::mapToViewRect(const sf::Vector2i &coords) {
+sf::IntRect Map::mapToViewRect(const sf::Vector2f &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();
   return sf::IntRect(coords.x * w, coords.y * h, w, h);

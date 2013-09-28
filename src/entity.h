@@ -7,11 +7,12 @@
 #include "config.h"
 #include "imageManager.h"
 #include "map.h"
+#include "clonable.h"
 
 /**
  * This class is a base for any element buildable by a Player.
  */
-class Entity {
+class Entity : public Clonable {
   public:
     /**
      * Constructor.
@@ -37,19 +38,23 @@ class Entity {
      */
     virtual ~Entity();
 
+    virtual Entity *clone() const = 0;
+
     /**
      * Returns the position of this Entity on the Map.
      *
      * @return    the position
      */
-    sf::Vector2i getPosition();
+    sf::Vector2f getPosition() const;
+
+    sf::Vector2i getTilePosition() const;
 
     /**
      * Sets the position of this Entity on the Map.
      *
      * @param position    the position
      */
-    void setPosition(const sf::Vector2i &position);
+    void setPosition(const sf::Vector2f &position);
 
     /**
      * Sets the Map this Entity sits on.
@@ -69,12 +74,17 @@ class Entity {
      */
     void paint(sf::RenderTarget *target, sf::Color color);
 
+    virtual void update();
+
+    virtual void defaultAction(const Entity *target) { }// TODO: = 0;
+    virtual void defaultAction(const sf::Vector2i &coords) = 0;
+
   protected:
     Map *map;
     std::string className;
     //TODO: reference the owner player
     JSONObject properties;
-    sf::Vector2i position;
+    sf::Vector2f position;
     const sf::Texture *texture;
 };
 

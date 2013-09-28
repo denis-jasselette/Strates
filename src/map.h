@@ -45,6 +45,8 @@ class Map {
      */
     sf::IntRect clampViewRect(const sf::IntRect &rect);
 
+    sf::Vector2f viewToMapFloatCoords(const sf::Vector2i &coords);
+
     /**
      * Converts a position in View coordinates to a position in Map
      * coordinates.
@@ -73,7 +75,7 @@ class Map {
      *
      * @return          the position in View coordinates
      */
-    sf::Vector2i mapToViewCoords(const sf::Vector2i &coords);
+    sf::Vector2i mapToViewCoords(const sf::Vector2f &coords);
 
     /**
      * Converts an IntRect in Map coordinates to an IntRect in View
@@ -83,7 +85,7 @@ class Map {
      *
      * @return            the IntRect in View coordinates
      */
-    sf::IntRect mapToViewRect(const sf::Vector2i &coords);
+    sf::IntRect mapToViewRect(const sf::Vector2f &coords);
 
     /**
      * Returns whether a position in Map coordinates is contained in the Map.

@@ -20,6 +20,18 @@ class Unit : public Entity {
      */
     Unit(const std::string &className,
         JSONObject properties);
+
+    virtual Unit *clone() const {
+      return new Unit(*this);
+    }
+
+    virtual void update();
+
+    virtual void defaultAction(const sf::Vector2i &coords);
+
+  protected:
+    bool isMoving;
+    sf::Vector2i destination;
 };
 
 #endif /* _UNIT_H_ */

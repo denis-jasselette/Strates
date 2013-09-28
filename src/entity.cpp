@@ -1,11 +1,12 @@
 #include "entity.h"
+#include <cmath>
 
 Entity::Entity(const std::string &className,
     JSONObject properties)
 {
   this->className = className;
   this->properties = properties;
-  position = sf::Vector2i(0, 0);
+  position = sf::Vector2f(0, 0);
 }
 
 Entity::Entity(const Entity &that) {
@@ -13,7 +14,7 @@ Entity::Entity(const Entity &that) {
   className = that.className;
   properties = that.properties;
   texture = that.texture;
-  position = sf::Vector2i(0, 0);
+  position = sf::Vector2f(0, 0);
 }
 
 Entity::~Entity() {
@@ -23,11 +24,15 @@ void Entity::setMap(Map *map) {
   this->map = map;
 }
 
-sf::Vector2i Entity::getPosition() {
+sf::Vector2f Entity::getPosition() const {
   return position;
 }
 
-void Entity::setPosition(const sf::Vector2i &position) {
+sf::Vector2i Entity::getTilePosition() const {
+  return sf::Vector2i(round(position.x), round(position.y));
+}
+
+void Entity::setPosition(const sf::Vector2f &position) {
   this->position = position;
 }
 
@@ -54,4 +59,7 @@ void Entity::paint(sf::RenderTarget *target, sf::Color color) {
 
   sprite.setPosition((sf::Vector2f) map->mapToViewCoords(position));
   target->draw(sprite);
+}
+
+void Entity::update() {
 }

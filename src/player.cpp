@@ -50,7 +50,7 @@ void Player::addEntity(std::string className, sf::Vector2i pos) {
 
 void Player::addEntity(Entity *ent, sf::Vector2i pos) {
   ent->setMap(map);
-  ent->setPosition(pos);
+  ent->setPosition(sf::Vector2f(pos));
   ent->setTexture(sprite_sheet);
   entities.push_back(ent);
 }
@@ -63,8 +63,10 @@ void Player::update() {
   foglight->reset();
   std::vector<Entity*>::iterator it;
   for (it = entities.begin(); it != entities.end(); it++) {
+    (*it)->update();
+
     int radius = (*it)->getProperty(L"visibility")->AsNumber();
-    sf::Vector2i pos = (*it)->getPosition();
+    sf::Vector2i pos = (*it)->getTilePosition();
     int size = (*it)->getProperty(L"size")->AsNumber();
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {

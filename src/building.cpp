@@ -5,3 +5,6 @@ Building::Building(const std::string &className,
   Entity(className, properties)
 {
 }
+
+void Building::defaultAction(const sf::Vector2i &coords) {
+}

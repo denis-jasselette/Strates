@@ -29,11 +29,17 @@ bool Game::onMousePressed(const Event &evt) {
   const MouseEvent &e = (const MouseEvent&) evt;
   const sf::Vector2i &pos = e.getPosition();
   sf::Vector2i coords = app->mapPixelToCoords(pos);
-  sf::Vector2i map_coords = map->viewToMapCoords(coords);
 
+  Entity *entity = findEntityAt(coords);
   if (e.getButton() == MouseEvent::BUTTON1) {
-    Entity *entity = findEntityAt(map_coords);
     setSelection(entity);
+  } else if (e.getButton() == MouseEvent::BUTTON2) {
+    if (selection.size() > 0) {
+      if (entity)
+        selection.back()->defaultAction(entity);
+      else
+        selection.back()->defaultAction(coords);
+    }
   }
 
   return true;
@@ -63,10 +69,11 @@ Entity *Game::findEntityAt(sf::Vector2i coords) const {
     std::vector<Entity*> entities = (*it)->getEntities();
     std::vector<Entity*>::const_iterator ent;
     for (ent = entities.begin(); ent != entities.end(); ent++) {
-      sf::Vector2i pos = (*ent)->getPosition();
+      sf::Vector2f pos = (*ent)->getPosition();
+      sf::Vector2f map_coords = map->viewToMapFloatCoords(coords);
       int size = (*ent)->getProperty(L"size")->AsNumber();
-      if (pos.x <= coords.x && coords.x < pos.x + size &&
-          pos.y <= coords.y && coords.y < pos.y + size)
+      if (pos.x <= map_coords.x && map_coords.x < pos.x + size &&
+          pos.y <= map_coords.y && map_coords.y < pos.y + size)
       {
         return *ent;
       }
@@ -86,7 +93,7 @@ void Game::paintSelection(sf::RenderTarget *target) const {
   std::vector<Entity*>::const_iterator it;
   for (it = selection.begin(); it != selection.end(); it++) {
     int size = (*it)->getProperty(L"size")->AsNumber();
-    sf::Vector2i mapPos = (*it)->getPosition();
+    sf::Vector2f mapPos = (*it)->getPosition();
     sf::IntRect rect = map->mapToViewRect(mapPos);
     rect.width *= size;
     rect.height *= size;
