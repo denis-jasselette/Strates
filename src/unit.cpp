@@ -17,7 +17,8 @@ void Unit::update(sf::Time frametime) {
 
   //std::cout << position.x << " " << position.y << std::endl;
 
-  if (isMoving) {
+  if (isMoving && !waypoints.empty()) {
+    destination = waypoints.front();
     float speed = getProperty(L"speed")->AsNumber();
     sf::Vector2f dir(sf::Vector2f(destination) - position);
     sf::Vector2f normalized_dir = dir / norm(dir);
@@ -25,10 +26,9 @@ void Unit::update(sf::Time frametime) {
     if (approx(position, sf::Vector2f(destination))) {
       position = sf::Vector2f(destination);
       if (!waypoints.empty()) {
-	destination = waypoints.front();
 	waypoints.pop_front();
       } else {
-      isMoving = false;
+        isMoving = false;
       }
     }
   }
@@ -41,12 +41,8 @@ void Unit::defaultAction(const sf::Vector2i &coords) {
 }
 
 void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
-  if(!isMoving) {
-    destination = tileCoords;
     isMoving = true;
-  } else {
     waypoints.push_back(tileCoords);
-  }
 }
 
 void Unit::clearWaypoints() {

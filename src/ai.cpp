@@ -35,6 +35,10 @@ public:
   bool operator<(const Node& o) const {
     return x < o.x || (x == o.x && y < o.y);
   }
+  
+  bool inLine(const Node& o) {
+      return x == o.x || y ==o.y || (std::abs(x - o.x) == std::abs(y - o.y));
+  }
 
   double f;
   double g;
@@ -72,13 +76,20 @@ void addWaypoints(Node *goal, Unit *ent) {
 
   ent->clearWaypoints();
   //Delete the start point
-  stack.pop();
+ // stack.pop();
+  Node* start = stack.top();
+  Node* prev = start;
   while(!stack.empty()) {
     Node* n = stack.top();
     stack.pop();
-    ent->addWaypoint(sf::Vector2i(n->x, n->y));
+    if  (!start->inLine(*n)) {
+        ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
+        start = prev;
+    }
     std::cout << n->x << " " << n->y << std::endl;
+    prev = n;
   }
+  ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
 }
 
 std::vector<Node*> getNeighbors(Map *m, std::vector<Node*> &nodeMap, std::vector<bool> &accMap, Node &n) {
