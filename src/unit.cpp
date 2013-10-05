@@ -21,12 +21,25 @@ void Unit::update(sf::Time frametime) {
     position += (speed * delta) * normalized_dir;
     if (approx(position, sf::Vector2f(destination))) {
       position = sf::Vector2f(destination);
+      if (!waypoints.empty()) {
+	destination = waypoints.front();
+	waypoints.pop();
+      } else {
       isMoving = false;
+      }
     }
   }
 }
 
 void Unit::defaultAction(const sf::Vector2i &coords) {
   isMoving = true;
-  destination = map->viewToMapCoords(coords);
+  destination = map->viewToMapCoords(coords); 
+}
+
+void Unit::addWaypoint(const sf::Vector2i &coords) {
+  if(!isMoving) {
+    destination = map->viewToMapCoords(coords);
+  } else {
+    waypoints.push(map->viewToMapCoords(coords));
+  }
 }
