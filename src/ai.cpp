@@ -6,6 +6,18 @@
 #include <stack>
 #include <algorithm>
 
+enum Dir {
+  NONE = 0,
+  NW,
+  N,
+  NE,
+  E,
+  SE,
+  S,
+  SW,
+  W    
+};
+
 class Node {
 public:
   Node(int x_, int y_) {
@@ -17,7 +29,7 @@ public:
     opened = false;
     closed = false;
   }  
-
+  
   Node() {
     x = 0;
     y = 0;
@@ -27,19 +39,41 @@ public:
     opened = false;
     closed = false;
   }
-
+  
   bool operator==(const Node& o) const {
     return x == o.x && y == o.y;
   }
-
+  
   bool operator<(const Node& o) const {
     return x < o.x || (x == o.x && y < o.y);
   }
   
   bool inLine(const Node& o) {
-      return x == o.x || y ==o.y || (std::abs(x - o.x) == std::abs(y - o.y));
+    return x == o.x || y ==o.y || (std::abs(x - o.x) == std::abs(y - o.y));
   }
-
+  
+  Dir getDir(const Node& o) {
+    
+    if(o.x == x - 1 && o.y == y - 1)
+      return NW;
+    if(o.x == x && o.y == y - 1)
+      return N;
+    if(o.x == x +1 && o.y == y - 1)
+      return NE;
+    if(o.x == x - 1 && o.y == y)
+      return W;
+    if(o.x == x + 1 && o.y == y)
+      return E;
+    if(o.x == x -1 && o.y == y + 1)
+      return SW;
+    if(o.x == x  && o.y == y + 1)
+      return S;
+    if(o.x == x + 1 && o.y == y + 1)
+      return SW;
+    
+    return NONE;
+  }
+  
   double f;
   double g;
   int x;
@@ -47,7 +81,7 @@ public:
   Node *prev;
   bool opened;
   bool closed;
- 
+  
 };
 
 class CompareNode {
@@ -73,53 +107,71 @@ void addWaypoints(Node *goal, Unit *ent) {
     stack.push(cur);
     cur = cur->prev;
   }
-
+  
   ent->clearWaypoints();
   //Delete the start point
- // stack.pop();
-  Node* start = stack.top();
-  Node* prev = start;
+  stack.pop();
+  Node* prev = stack.top();
+  Dir lastDir = NONE;
   while(!stack.empty()) {
     Node* n = stack.top();
+    Dir dir = prev->getDir(*n);
     stack.pop();
-    if  (!start->inLine(*n)) {
-        ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
-        start = prev;
+    if  (dir != lastDir) {
+      ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
     }
-    std::cout << n->x << " " << n->y << std::endl;
+    lastDir = dir;
     prev = n;
   }
+  
   ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
 }
 
 std::vector<Node*> getNeighbors(Map *m, std::vector<Node*> &nodeMap, std::vector<bool> &accMap, Node &n) {
   std::vector<Node*> rtn;
-  int w = m->getWidth();
-  int h = m->getHeight();
+  int width = m->getWidth();
+  
+  //True obstacle
+  //false can pass
 
-  int j_start = std::max(n.x - 1, 0);
-  int i_start = std::max(n.y - 1, 0);
-
-  int j_end = std::min(w, n.x + 2);
-  int i_end = std::min(h, n.y + 2);
-
-  for (int j = j_start; j < j_end; j++) {
-    for (int i = i_start; i < i_end; i++) {
-
-      if((j == n.x && i == n.y) || accMap[i*w+j]) 
-	continue;
-      
-      if(nodeMap[i*w+j] == NULL)
-	nodeMap[i*w+j] = new Node(j, i); 
-
-      std::cout << "j,i " << j << " " << i << std::endl;
-      std::cout << nodeMap[i*w+j]->x << " " << nodeMap[i*w+j]->y << std::endl;
-      rtn.push_back(nodeMap[i*w+j]);
+  bool acc[9];
+  //First compute if we are in the map
+  for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < 3; i++) {
+      acc[i*3+j] = !m->contains(n.x-1+j, n.y-i+j); 
     }
   }
 
-  return rtn;
+  //Then compute if the we are occupied
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if(!acc[i*3+j])
+	acc[i*3+j] = accMap[(n.y - 1 + i) * width + n.x -1 + j];
+    }
+  }
+  
+  //Remove diagonals if there is an obstacle
+  acc[0] = acc[0] || acc[1] || acc[3];
+  acc[2] = acc[2] || acc[1] || acc[5];
+  acc[6] = acc[6] || acc[3] || acc[7];
+  acc[8] = acc[8] || acc[5] || acc[7];
+  
+  //Finaly add the accessible neighbors
+  for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < 3; i++) {
+      
+      if ((i == 1 && j == 1) || acc[i*3+j]) 
+	continue;
+      
+      int index = (n.y + i - 1) * width + n.x + j - 1;
+      if (nodeMap[index] == NULL)
+	nodeMap[index] = new Node(n.x + j - 1, n.y + i - 1); 
+      
+      rtn.push_back(nodeMap[index]);
+    }
+  }  
 
+  return rtn;
 }
 
 AI::AI() {
@@ -138,7 +190,9 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
   std::vector<Entity*>::iterator it;
   std::vector<Entity*> ents = game->getEntities();
   for(it = ents.begin(); it != ents.end(); it++) {
-    std::cout << "Addings ent to the visibility map" << std::endl;
+      if ((*it) == e) {
+          continue;
+      }
     sf::Vector2i pos = (*it)->getTilePosition();
     int size = (*it)->getProperty(L"size")->AsNumber();
     for (int i = pos.y; i < pos.y + size; i++) {
@@ -160,8 +214,6 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
   start->f = start->g + heuristicCostEstimate(*start, *goal);
   start->opened = true;
   queue.push(start);
-  std::cout << "Start :" << start->x << " " << start->y << std::endl;
-  std::cout << "Goal :" << goal->x << " " << goal->y << std::endl;
 
   while (!queue.empty()) {
     
@@ -171,7 +223,6 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
       break;
     }
 
-    std::cout << "Current :" << current->x << " " << current->y << " " << current->f << std::endl;
     queue.pop();
     current->opened = false;
     current->closed = true;
@@ -182,7 +233,6 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
       Node* n = (*it);
       double tent_g = current->g + dist(*n, *current);
       double tent_f = tent_g + heuristicCostEstimate(*n, *goal);
-      std::cout << "new " << n->x << " " << n->y << " " <<n->f << std::endl;
 
       if (n->closed && tent_f >= n->f)
 	continue;
