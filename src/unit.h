@@ -2,7 +2,7 @@
 #define _UNIT_H_
 
 #include "entity.h"
-#include <queue>
+#include <list>
 
 /**
  * Implements Entity specializing it for mobile units.
@@ -31,11 +31,12 @@ class Unit : public Entity {
     virtual void defaultAction(const sf::Vector2i &coords);
     void addWaypoint(const sf::Vector2i &coords);
     void clearWaypoints();
+    std::list<sf::Vector2i> getWaypoints();
 
   protected:
     bool isMoving;
     sf::Vector2i destination;
-    std::queue<sf::Vector2i> waypoints;
+    std::list<sf::Vector2i> waypoints;
 };
 
 #endif /* _UNIT_H_ */

@@ -26,7 +26,7 @@ void Unit::update(sf::Time frametime) {
       position = sf::Vector2f(destination);
       if (!waypoints.empty()) {
 	destination = waypoints.front();
-	waypoints.pop();
+	waypoints.pop_front();
       } else {
       isMoving = false;
       }
@@ -45,12 +45,15 @@ void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
     destination = tileCoords;
     isMoving = true;
   } else {
-    waypoints.push(tileCoords);
+    waypoints.push_back(tileCoords);
   }
 }
 
 void Unit::clearWaypoints() {
-    while(!waypoints.empty())
-        waypoints.pop();
+    waypoints.clear();
     isMoving = false;
+}
+
+std::list<sf::Vector2i> Unit::getWaypoints() {
+    return waypoints;
 }
