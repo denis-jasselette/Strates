@@ -31,6 +31,7 @@ Application::~Application() {
 }
 
 int Application::run() {
+  window.setActive(false);
   sf::Thread screensThread(&Application::runScreens, this);
 
   screensThread.launch();
@@ -40,6 +41,7 @@ int Application::run() {
 }
 
 void Application::runScreens() {
+  window.setActive(true);
   while (current >= 0)
     current = screens[current]->run();
 }
