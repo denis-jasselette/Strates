@@ -1,6 +1,7 @@
 #include <cmath>
 #include "unit.h"
 #include "utils.h"
+#include "ai.h"
 
 Unit::Unit(const std::string &className,
     JSONObject properties) :
@@ -13,6 +14,8 @@ void Unit::update(sf::Time frametime) {
   // FIXME: we assume that the time between each update is 1 / 60 (60 Hz), this
   // should be changed to use real time elapsed.
   float delta = frametime.asSeconds();
+
+  //std::cout << position.x << " " << position.y << std::endl;
 
   if (isMoving) {
     float speed = getProperty(L"speed")->AsNumber();
@@ -32,14 +35,16 @@ void Unit::update(sf::Time frametime) {
 }
 
 void Unit::defaultAction(const sf::Vector2i &coords) {
-  isMoving = true;
-  destination = map->viewToMapCoords(coords); 
+  //isMoving = true;
+  //destination = map->viewToMapCoords(coords);
+  AI::getInstance().computePath(this, map->viewToMapCoords(coords));
 }
 
-void Unit::addWaypoint(const sf::Vector2i &coords) {
+void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
   if(!isMoving) {
-    destination = map->viewToMapCoords(coords);
+    destination = tileCoords;
+    isMoving = true;
   } else {
-    waypoints.push(map->viewToMapCoords(coords));
+    waypoints.push(tileCoords);
   }
 }

@@ -131,3 +131,15 @@ void Game::setRadius(int radius) {
 Map *Game::getMap() {
   return map;
 }
+
+std::vector<Entity*> Game::getEntities() {
+  std::vector<Entity*> rtn;
+
+  std::vector<Player*>::iterator it;
+  for (it = players.begin(); it != players.end(); it++) {
+    std::vector<Entity*> pEnts = (*it)->getEntities();
+    rtn.insert(rtn.end(), pEnts.begin(), pEnts.end()); 
+  }
+
+  return rtn;
+}

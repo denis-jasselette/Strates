@@ -51,6 +51,15 @@ const JSONValue *Entity::getProperty(const std::wstring &name) {
   return it->second;
 }
 
+bool Entity::occupyTile(const sf::Vector2i &coord) {
+  int size = getProperty(L"size")->AsNumber();
+  sf::Vector2f pos = getPosition();
+  sf::FloatRect tileRect = sf::FloatRect(coord.x, coord.y, 1, 1);
+  sf::FloatRect entityRect = sf::FloatRect(pos.x, pos.y, size, size);
+
+  return tileRect.intersects(entityRect);  
+}
+
 void Entity::paint(sf::RenderTarget *target, sf::Color color) {
   const JSONArray &rectVect = properties.find(L"spriteRect")->second->AsArray();
   sf::IntRect spriteRect(rectVect[0]->AsNumber(), rectVect[1]->AsNumber(),

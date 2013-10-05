@@ -67,6 +67,8 @@ class Entity : public Clonable {
 
     const JSONValue *getProperty(const std::wstring &name);
 
+    bool occupyTile(const sf::Vector2i &coord);
+
     /**
      * Paints this Entity on a RenderTarget
      *

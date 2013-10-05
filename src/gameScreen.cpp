@@ -2,12 +2,14 @@
 #include "gameScreen.h"
 #include "utils.h"
 #include "mouseEvent.h"
+#include "ai.h"
 
 GameScreen::GameScreen(Application *app) :
   Screen(app),
   hud(app->getImgMgr())
 {
   game = new Game(app, this);
+  AI::getInstance().init(game);
 }
 
 void GameScreen::onEvent(sf::Event &evt) {

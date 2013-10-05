@@ -55,6 +55,8 @@ class Game : public Widget {
 
     Map *getMap();
 
+    std::vector<Entity*> getEntities();
+
     Entity *findEntityAt(sf::Vector2i coords) const;
 
     void setSelection(Entity *entity);

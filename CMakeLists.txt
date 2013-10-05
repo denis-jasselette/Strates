@@ -38,6 +38,7 @@ add_library(Core
   src/event.cpp
   src/imageManager.cpp
   src/screen.cpp
+  src/ai.cpp
 )
 
 add_executable(strates

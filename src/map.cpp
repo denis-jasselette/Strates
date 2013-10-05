@@ -220,3 +220,11 @@ sf::IntRect Map::mapToViewRect(const sf::Vector2f &coords) {
 bool Map::contains(int x, int y) {
   return x >= 0 && x < width && y >= 0 && y < height;
 }
+
+int Map::getWidth() {
+  return width;
+}
+
+int Map::getHeight() {
+  return height;
+}

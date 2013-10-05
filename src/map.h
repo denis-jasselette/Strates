@@ -96,6 +96,8 @@ class Map {
      * @return     true if the position is in the Map, false otherwise
      */
     bool contains(int x, int y);
+    int getWidth();
+    int getHeight();
 
   protected:
     int width, height;
