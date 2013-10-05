@@ -30,6 +30,7 @@ class Unit : public Entity {
 
     virtual void defaultAction(const sf::Vector2i &coords);
     void addWaypoint(const sf::Vector2i &coords);
+    void clearWaypoints();
 
   protected:
     bool isMoving;

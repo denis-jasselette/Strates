@@ -48,3 +48,9 @@ void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
     waypoints.push(tileCoords);
   }
 }
+
+void Unit::clearWaypoints() {
+    while(!waypoints.empty())
+        waypoints.pop();
+    isMoving = false;
+}

@@ -70,6 +70,7 @@ void addWaypoints(Node *goal, Unit *ent) {
     cur = cur->prev;
   }
 
+  ent->clearWaypoints();
   //Delete the start point
   stack.pop();
   while(!stack.empty()) {
