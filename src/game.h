@@ -72,6 +72,7 @@ class Game : public Widget {
     Player *focusedPlayer;
     std::vector<Entity*> selection;
     TileMap *fogTileMap;
+    sf::Clock clock;
 };
 
 #endif	/* _GAME_H_ */

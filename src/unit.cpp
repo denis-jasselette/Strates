@@ -9,10 +9,10 @@ Unit::Unit(const std::string &className,
   isMoving = false;
 }
 
-void Unit::update() {
+void Unit::update(sf::Time frametime) {
   // FIXME: we assume that the time between each update is 1 / 60 (60 Hz), this
   // should be changed to use real time elapsed.
-  float delta = 1 / 60.;
+  float delta = frametime.asSeconds();
 
   if (isMoving) {
     float speed = getProperty(L"speed")->AsNumber();

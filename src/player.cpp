@@ -59,11 +59,11 @@ std::vector<Entity*> Player::getEntities() {
   return entities;
 }
 
-void Player::update() {
+void Player::update(sf::Time frametime) {
   foglight->reset();
   std::vector<Entity*>::iterator it;
   for (it = entities.begin(); it != entities.end(); it++) {
-    (*it)->update();
+    (*it)->update(frametime);
 
     int radius = (*it)->getProperty(L"visibility")->AsNumber();
     sf::Vector2i pos = (*it)->getTilePosition();

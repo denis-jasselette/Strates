@@ -61,5 +61,5 @@ void Entity::paint(sf::RenderTarget *target, sf::Color color) {
   target->draw(sprite);
 }
 
-void Entity::update() {
+void Entity::update(sf::Time frametime) {
 }

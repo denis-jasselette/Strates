@@ -56,9 +56,11 @@ Game::~Game() {
 }
 
 void Game::update() {
+
+  sf::Time frametime = clock.restart();
   std::vector<Player*>::iterator it;
   for (it = players.begin(); it != players.end(); it++)
-    (*it)->update();
+    (*it)->update(frametime);
 
   repaint();
 }

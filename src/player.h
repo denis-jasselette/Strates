@@ -50,7 +50,7 @@ class Player {
      *
      * This should be called at each frame.
      */
-    void update();
+    void update(sf::Time frametime);
 
     /**
      * Paints the Entity's on a RenderTarget.

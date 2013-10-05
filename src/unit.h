@@ -25,7 +25,7 @@ class Unit : public Entity {
       return new Unit(*this);
     }
 
-    virtual void update();
+    virtual void update(sf::Time frametime);
 
     virtual void defaultAction(const sf::Vector2i &coords);
 

@@ -74,7 +74,7 @@ class Entity : public Clonable {
      */
     void paint(sf::RenderTarget *target, sf::Color color);
 
-    virtual void update();
+    virtual void update(sf::Time frametime);
 
     virtual void defaultAction(const Entity *target) { }// TODO: = 0;
     virtual void defaultAction(const sf::Vector2i &coords) = 0;
