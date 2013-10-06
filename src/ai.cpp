@@ -92,8 +92,14 @@ public:
 };
 
 double heuristicCostEstimate(Node &a, Node &b) {
-  //manhattan dist
-  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+  //http://rocketmandevelopment.com/blog/a-heuristics/
+  int xDist = std::abs(a.x - b.x);
+  int yDist = std::abs(a.y - b.y);
+
+  if (xDist > yDist) 
+    return 1.4*yDist + (xDist - yDist);
+  else
+    return 1.4*xDist + (yDist - xDist);
 }
 
 double dist(Node &a, Node &b) {
