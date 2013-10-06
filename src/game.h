@@ -58,13 +58,17 @@ class Game : public Widget {
     std::vector<Entity*> getEntities();
 
     Entity *findEntityAt(sf::Vector2i coords) const;
+    std::vector<Entity*> findEntityIn(sf::IntRect rect, Player* player) const;
 
     void setSelection(Entity *entity);
 
     bool onMousePressed(const Event &evt);
+    bool onMouseReleased(const Event &evt);
+    bool onMouseMoved(const Event &evt);
 
   private:
     void paintSelection(sf::RenderTarget *target) const;
+    sf::IntRect getSelectionRect() const;
 
     Application *app;
     int radius;
@@ -73,6 +77,9 @@ class Game : public Widget {
     std::vector<Player*> players;
     Player *focusedPlayer;
     std::vector<Entity*> selection;
+    bool selectionEnabled;
+    sf::Vector2i selectionStart;
+    sf::Vector2i selectionEnd;
     TileMap *fogTileMap;
     sf::Clock clock;
 };

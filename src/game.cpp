@@ -14,6 +14,7 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
   techTree = TechTree::fromFile(res_path("techtree.json"));
   map = Map::fromFile(res_path("map"), app->getImgMgr());
   fogTileMap = new TileMap("fow", app->getImgMgr());
+  selectionEnabled = false;
 
   players.push_back(new Player("Raymond", techTree, map, fogTileMap, sf::Color::Red, app->getImgMgr()));
   players.push_back(new Player("Jean-Pierre", techTree, map, fogTileMap, sf::Color::Blue, app->getImgMgr()));
@@ -23,6 +24,10 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
   EventCallback *func;
   func = new EventMethodCallback<Game>(this, &Game::onMousePressed);
   addEventCallback("MousePressed", func);
+  func = new EventMethodCallback<Game>(this, &Game::onMouseReleased);
+  addEventCallback("MouseReleased", func);
+  func = new EventMethodCallback<Game>(this, &Game::onMouseMoved);
+  addEventCallback("MouseMoved", func);
 }
 
 bool Game::onMousePressed(const Event &evt) {
@@ -32,8 +37,10 @@ bool Game::onMousePressed(const Event &evt) {
   const sf::Vector2i &pos = e.getPosition();
   sf::Vector2i coords = app->mapPixelToCoords(pos);
 
+  
   Entity *entity = findEntityAt(coords);
   if (e.getButton() == MouseEvent::BUTTON1) {
+    selection.clear();
     setSelection(entity);
   } else if (e.getButton() == MouseEvent::BUTTON2) {
     if (selection.size() > 0) {
@@ -42,6 +49,28 @@ bool Game::onMousePressed(const Event &evt) {
       else
         selection.back()->defaultAction(coords);
     }
+  }
+  selectionEnabled = true;
+  selectionStart = coords;
+  return true;
+}
+
+bool Game::onMouseMoved(const Event &evt) {
+  const MouseEvent &e = (const MouseEvent&) evt;
+  const sf::Vector2i &pos = e.getPosition();
+  sf::Vector2i coords = app->mapPixelToCoords(pos);
+  selectionEnd = coords;
+  return true;
+}
+
+bool Game::onMouseReleased(const Event &evt) {
+  log("Unclick!");
+
+  selectionEnabled = false;
+  std::vector<Entity*>::const_iterator it;
+  std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
+  for (it = candidates.begin(); it != candidates.end(); it++) {
+    selection.push_back(*it);
   }
 
   return true;
@@ -87,14 +116,78 @@ Entity *Game::findEntityAt(sf::Vector2i coords) const {
   return NULL;
 }
 
+std::vector<Entity*> Game::findEntityIn(sf::IntRect rect, Player* player=NULL) const {
+  std::vector<Entity*> rtn;
+  std::vector<Player*>::const_iterator it;
+  for (it = players.begin(); it != players.end(); it++) {
+    
+    if (player != NULL && player != (*it))
+      continue;
+    
+    std::vector<Entity*> entities = (*it)->getEntities();
+    std::vector<Entity*>::const_iterator ent;
+    for (ent = entities.begin(); ent != entities.end(); ent++) {
+      sf::Vector2f pos = (*ent)->getPosition();
+      int size = (*ent)->getProperty(L"size")->AsNumber();
+      sf::FloatRect ent_rect(pos.x, pos.y, size, size);
+ 
+      sf::FloatRect map_rect = map->viewToMapFloatRect(rect);
+      if (ent_rect.intersects(map_rect)) {
+	rtn.push_back(*ent);
+      }
+    }
+  }  
+  return rtn;
+}
+
 void Game::setSelection(Entity *entity) {
   selection.clear();
   if (entity)
     selection.push_back(entity);
 }
 
+sf::IntRect Game::getSelectionRect() const {
+  sf::Vector2i rect_size;
+  rect_size.x = std::abs(selectionStart.x - selectionEnd.x);
+  rect_size.y = std::abs(selectionStart.y - selectionEnd.y);
+  sf::Vector2i rect_pos;
+  
+  rect_pos.x = (selectionStart.x < selectionEnd.x) ? selectionStart.x : selectionEnd.x;
+  rect_pos.y = (selectionStart.y < selectionEnd.y) ? selectionStart.y : selectionEnd.y;
+  return sf::IntRect(rect_pos, rect_size);
+}
+
 void Game::paintSelection(sf::RenderTarget *target) const {
   std::vector<Entity*>::const_iterator it;
+  if(selectionEnabled) {
+    sf::IntRect sel_rect = getSelectionRect();
+    sf::Vector2f rect_size(sel_rect.width, sel_rect.height);
+    sf::Vector2f rect_pos(sel_rect.left, sel_rect.top);
+	
+    sf::RectangleShape shape(rect_size);
+    shape.setPosition(rect_pos.x, rect_pos.y);
+    shape.setFillColor(sf::Color::Transparent);
+    shape.setOutlineColor(sf::Color::Green);
+    shape.setOutlineThickness(1);
+    target->draw(shape);
+   
+    std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
+    for (it = candidates.begin(); it != candidates.end(); it++) {
+      int size = (*it)->getProperty(L"size")->AsNumber();
+      sf::Vector2f mapPos = (*it)->getPosition();
+      sf::IntRect rect = map->mapToViewRect(mapPos);
+      rect.width *= size;
+      rect.height *= size;
+      sf::Vector2f rect_size(rect.width - 2, rect.height - 2);
+      sf::RectangleShape shape(rect_size);
+      shape.setPosition(rect.left + 1, rect.top + 1);
+      shape.setFillColor(sf::Color::Transparent);
+      shape.setOutlineColor(sf::Color::Green);
+      shape.setOutlineThickness(1);
+      target->draw(shape);
+    }
+  }
+
   for (it = selection.begin(); it != selection.end(); it++) {
     int size = (*it)->getProperty(L"size")->AsNumber();
     sf::Vector2f mapPos = (*it)->getPosition();

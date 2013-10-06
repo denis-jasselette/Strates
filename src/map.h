@@ -46,6 +46,7 @@ class Map {
     sf::IntRect clampViewRect(const sf::IntRect &rect);
 
     sf::Vector2f viewToMapFloatCoords(const sf::Vector2i &coords);
+    sf::FloatRect viewToMapFloatRect(const sf::IntRect &rect);
 
     /**
      * Converts a position in View coordinates to a position in Map

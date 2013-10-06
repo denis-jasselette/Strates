@@ -187,6 +187,12 @@ sf::Vector2f Map::viewToMapFloatCoords(const sf::Vector2i &coords) {
   return sf::Vector2f(coords.x / w, coords.y / h);
 }
 
+sf::FloatRect Map::viewToMapFloatRect(const sf::IntRect &rect) {
+  sf::Vector2f start = viewToMapFloatCoords(sf::Vector2i(rect.left, rect.top));
+  sf::Vector2f end = viewToMapFloatCoords(sf::Vector2i(rect.left + rect.width, rect.top + rect.height));
+  return sf::FloatRect(start.x, start.y, end.x - start.x, end.y - start.y);
+}
+
 sf::Vector2i Map::viewToMapCoords(const sf::Vector2i &coords) {
   int w = tileMap->getTileWidth();
   int h = tileMap->getTileHeight();

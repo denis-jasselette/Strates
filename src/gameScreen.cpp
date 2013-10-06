@@ -34,6 +34,13 @@ void GameScreen::onEvent(sf::Event &evt) {
       log("MouseButtonPressed");
       onMouseButtonPressed(evt);
       break;
+    case sf::Event::MouseButtonReleased:
+      log("MouseButtonReleased");
+      onMouseButtonReleased(evt);
+      break;
+    case sf::Event::MouseMoved:
+      onMouseMoved(evt);
+      break;
     default:
       break;
   }
@@ -197,4 +204,35 @@ void GameScreen::onMouseButtonPressed(sf::Event &evt) {
     MouseEvent e(MouseEvent::MOUSE_PRESSED, button, coords);
     dispatchEvent(e);
   }
+}
+
+void GameScreen::onMouseButtonReleased(sf::Event &evt) {
+  int button;
+  sf::Vector2i coords = app->getCursor()->getPosition();
+
+  switch (evt.mouseButton.button) {
+    case sf::Mouse::Left:
+      button = MouseEvent::BUTTON1;
+      break;
+    case sf::Mouse::Right:
+      button = MouseEvent::BUTTON2;
+      break;
+    case sf::Mouse::Middle:
+      button = MouseEvent::BUTTON3;
+      break;
+    default:
+      button = MouseEvent::NOBUTTON;
+      break;
+  }
+
+  if (button != MouseEvent::NOBUTTON) {
+    MouseEvent e(MouseEvent::MOUSE_RELEASED, button, coords);
+    dispatchEvent(e);
+  }
+}
+
+void GameScreen::onMouseMoved(sf::Event &evt) {
+  sf::Vector2i coords = app->getCursor()->getPosition();
+  MouseEvent e(MouseEvent::MOUSE_MOVED, MouseEvent::NOBUTTON, coords); 
+  dispatchEvent(e);
 }

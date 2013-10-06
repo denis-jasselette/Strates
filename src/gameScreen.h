@@ -35,6 +35,8 @@ class GameScreen : public Screen {
     void onKeyReleased(sf::Event &evt);
     void onMouseWheelMoved(sf::Event &evt);
     void onMouseButtonPressed(sf::Event &evt);
+    void onMouseButtonReleased(sf::Event &evt);
+    void onMouseMoved(sf::Event &evt);
 };
 
 #endif /* _GAMESCREEN_H_ */
