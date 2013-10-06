@@ -14,11 +14,12 @@ class AI {
 
   void init(Game *game);
   void computePath(Unit *e, const sf::Vector2i &coords);
-
+  void prepareAccMap(std::vector<Entity*> &exclude);
  private:
   AI();
  
   Game *game;
+  std::vector<bool> accMap;
 };
 
 

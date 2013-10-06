@@ -34,7 +34,7 @@ void Unit::update(sf::Time frametime) {
 }
 
 void Unit::defaultAction(const sf::Vector2i &coords) {
-  AI::getInstance().computePath(this, map->viewToMapCoords(coords));
+  AI::getInstance().computePath(this, coords);
 }
 
 void Unit::addWaypoint(const sf::Vector2i &tileCoords) {

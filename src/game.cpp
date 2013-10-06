@@ -5,6 +5,7 @@
 #include "game.h"
 #include "utils.h"
 #include "mouseEvent.h"
+#include "ai.h"
 #include <exception>
 
 Game::Game(Application *app, Widget *parent) : Widget(parent) {
@@ -36,23 +37,46 @@ bool Game::onMousePressed(const Event &evt) {
   const MouseEvent &e = (const MouseEvent&) evt;
   const sf::Vector2i &pos = e.getPosition();
   sf::Vector2i coords = app->mapPixelToCoords(pos);
-
   
+  if(e.getButton() == MouseEvent::BUTTON3) {
+    focusedPlayer->addEntity("worker", map->viewToMapCoords(coords));
+  }
+  
+  selectionAction(evt);
+  if( e.getButton() == MouseEvent::BUTTON1) {
+    selectionEnabled = true;
+    selectionStart = coords;
+  }
+  return true;
+}
+
+void Game::selectionAction(const Event &evt) {
+  const MouseEvent &e = (const MouseEvent&) evt;
+  const sf::Vector2i &pos = e.getPosition();
+  sf::Vector2i coords = app->mapPixelToCoords(pos);
+  sf::Vector2i map_coords = map->viewToMapCoords(coords);
   Entity *entity = findEntityAt(coords);
   if (e.getButton() == MouseEvent::BUTTON1) {
     selection.clear();
     setSelection(entity);
   } else if (e.getButton() == MouseEvent::BUTTON2) {
-    if (selection.size() > 0) {
+    int size = sqrt(selection.size());
+    int i = 0;
+    std::vector<Entity*>::iterator it;    
+    //Prepare pathfinding
+    //Todo find a better place
+    AI::getInstance().prepareAccMap(selection);
+    for(it = selection.begin(); it != selection.end(); it++) {
+      int ent_size = (*it)->getProperty(L"size")->AsNumber(); 
+      int x = map_coords.x + (i % size);
+      int y = map_coords.y + (i / size);
       if (entity)
-        selection.back()->defaultAction(entity);
+        (*it)->defaultAction(entity);
       else
-        selection.back()->defaultAction(coords);
+        (*it)->defaultAction(sf::Vector2i(x, y));
+      i++;
     }
   }
-  selectionEnabled = true;
-  selectionStart = coords;
-  return true;
 }
 
 bool Game::onMouseMoved(const Event &evt) {
@@ -66,13 +90,14 @@ bool Game::onMouseMoved(const Event &evt) {
 bool Game::onMouseReleased(const Event &evt) {
   log("Unclick!");
 
-  selectionEnabled = false;
-  std::vector<Entity*>::const_iterator it;
-  std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
-  for (it = candidates.begin(); it != candidates.end(); it++) {
-    selection.push_back(*it);
+  if(selectionEnabled) {
+    std::vector<Entity*>::const_iterator it;
+    std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
+    for (it = candidates.begin(); it != candidates.end(); it++) {
+      selection.push_back(*it);
+    }
+    selectionEnabled = false;
   }
-
   return true;
 }
 

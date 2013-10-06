@@ -5,6 +5,7 @@
 #include <queue>
 #include <stack>
 #include <algorithm>
+#include <set>
 
 enum Dir {
   NONE = 0,
@@ -144,7 +145,7 @@ std::vector<Node*> getNeighbors(Map *m, std::vector<Node*> &nodeMap, std::vector
   //First compute if we are in the map
   for (int j = 0; j < 3; j++) {
     for (int i = 0; i < 3; i++) {
-      acc[i*3+j] = !m->contains(n.x-1+j, n.y-i+j); 
+      acc[i*3+j] = !m->contains(n.x-1+j, n.y-1+i); 
     }
   }
 
@@ -188,17 +189,17 @@ void AI::init(Game* game_) {
   game = game_;
 }
 
-void AI::computePath(Unit *e, const sf::Vector2i &coords) {
-  //Compute an accessibility map
+void AI::prepareAccMap(std::vector<Entity*> &exclude) {
+  std::set<Entity*> exclude_set;
+  exclude_set.insert(exclude.begin(), exclude.end());
   Map* map = game->getMap();
-  
-  std::vector<bool> accMap(map->getWidth() * map->getHeight(), false);
+  accMap = std::vector<bool>(map->getWidth() * map->getHeight(), false);
   std::vector<Entity*>::iterator it;
   std::vector<Entity*> ents = game->getEntities();
   for(it = ents.begin(); it != ents.end(); it++) {
-      if ((*it) == e) {
-          continue;
-      }
+    if (exclude_set.find((*it)) != exclude_set.end()) {
+      continue;
+    }
     sf::Vector2i pos = (*it)->getTilePosition();
     int size = (*it)->getProperty(L"size")->AsNumber();
     for (int i = pos.y; i < pos.y + size; i++) {
@@ -207,11 +208,40 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
       }
     }
   }
+}
 
+void AI::computePath(Unit *e, const sf::Vector2i &coords) {
+  //Compute an accessibility map
+  Map* map = game->getMap(); 
+  
+  
   //Astar implementation
   std::vector<Node*> nodeMap(map->getWidth() * map->getHeight(), NULL);
   Node *start = new Node(e->getTilePosition().x, e->getTilePosition().y);
   Node *goal = new Node(coords.x, coords.y);
+  
+  //Find another node if goal is occupied
+  int radius = 1;
+  bool found = !accMap[goal->y * map->getWidth() + goal->x];
+  while (!found) {
+    for(int i = 0; i < radius * 2; i++) {
+      for(int j = 0; j < radius * 2; j++) {
+	int x = goal->x - radius + j;
+	int y = goal->y - radius + i;
+	if(map->contains(x, y) &&
+	   !accMap[y * map->getWidth() + x]) {
+	  goal->x = x;
+	  goal->y = y;
+	  found = true;
+	  break;
+	}
+      }
+      if(found)
+	break;
+    }
+    radius++;
+  }
+  
   nodeMap[start->y * map->getWidth() + start->x] = start;
   nodeMap[goal->y * map->getWidth() + goal->x] = goal;
   std::priority_queue<Node*, std::vector<Node*>, CompareNode> queue;

@@ -68,6 +68,7 @@ class Game : public Widget {
 
   private:
     void paintSelection(sf::RenderTarget *target) const;
+    void selectionAction(const Event &evt);
     sf::IntRect getSelectionRect() const;
 
     Application *app;
