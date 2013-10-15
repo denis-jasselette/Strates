@@ -216,7 +216,7 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
   
   
   //Astar implementation
-  std::vector<Node*> nodeMap(map->getWidth() * map->getHeight(), NULL);
+  std::vector<Node*> nodeMap(map->getWidth() * map->getHeight(), (Node*) NULL);
   Node *start = new Node(e->getTilePosition().x, e->getTilePosition().y);
   Node *goal = new Node(coords.x, coords.y);
   

@@ -34,7 +34,6 @@ class Unit : public Entity {
     std::list<sf::Vector2i> getWaypoints();
 
   protected:
-    bool isMoving;
     sf::Vector2i destination;
     std::list<sf::Vector2i> waypoints;
 };

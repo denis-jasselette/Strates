@@ -7,23 +7,17 @@ Unit::Unit(const std::string &className,
     JSONObject properties) :
   Entity(className, properties)
 {
-  isMoving = false;
 }
 
 void Unit::update(sf::Time frametime) {
-  // FIXME: we assume that the time between each update is 1 / 60 (60 Hz), this
-  // should be changed to use real time elapsed.
   float delta = frametime.asSeconds();
   
-  if (isMoving && !waypoints.empty()) {
+  if (!waypoints.empty()) {
       destination = waypoints.front();
       if (approx(position, sf::Vector2f(destination))) {
 	position = sf::Vector2f(destination);
-	if (!waypoints.empty()) {
+	if (!waypoints.empty())
 	  waypoints.pop_front();
-	} else {
-	  isMoving = false;
-	}
       } else {
 	float speed = getProperty(L"speed")->AsNumber();
 	sf::Vector2f dir(sf::Vector2f(destination) - position);
@@ -38,7 +32,6 @@ void Unit::defaultAction(const sf::Vector2i &coords) {
 }
 
 void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
-  isMoving = true;
   waypoints.push_back(tileCoords);
 }
 
