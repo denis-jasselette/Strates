@@ -228,7 +228,7 @@ void Game::paintSelection(sf::RenderTarget *target) const {
     target->draw(shape);
 
     Unit *u = dynamic_cast<Unit*>((*it));
-    sf::Vector2i lastPos = map->mapToViewCoords(mapPos + sf::Vector2f(0.5, 0.5));
+    sf::Vector2i lastPos = map->mapToViewCoords(mapPos + float(size) * sf::Vector2f(0.5, 0.5));
     if (u != NULL) {    
         std::list<sf::Vector2i> waypoints = u->getWaypoints();
         std::list<sf::Vector2i>::iterator wit;
@@ -241,7 +241,7 @@ void Game::paintSelection(sf::RenderTarget *target) const {
             circle.setOutlineColor(sf::Color::Green);
             circle.setOutlineThickness(1);
             target->draw(circle);
-            sf::Vector2i newPos = map->mapToViewCoords(tmpPos + sf::Vector2f(0.5, 0.5));
+            sf::Vector2i newPos = map->mapToViewCoords(tmpPos + float(size) * sf::Vector2f(0.5, 0.5));
             sf::Vertex line[] = {
                 sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y)),
                 sf::Vertex(sf::Vector2f(newPos.x, newPos.y))
