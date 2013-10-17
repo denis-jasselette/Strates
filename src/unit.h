@@ -2,7 +2,6 @@
 #define _UNIT_H_
 
 #include "entity.h"
-#include <list>
 
 /**
  * Implements Entity specializing it for mobile units.
@@ -26,16 +25,7 @@ class Unit : public Entity {
       return new Unit(*this);
     }
 
-    virtual void update(sf::Time frametime);
-
     virtual void defaultAction(const sf::Vector2i &coords);
-    void addWaypoint(const sf::Vector2i &coords);
-    void clearWaypoints();
-    std::list<sf::Vector2i> getWaypoints();
-
-  protected:
-    sf::Vector2i destination;
-    std::list<sf::Vector2i> waypoints;
 };
 
 #endif /* _UNIT_H_ */

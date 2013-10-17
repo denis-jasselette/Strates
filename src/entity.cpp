@@ -1,5 +1,7 @@
-#include "entity.h"
 #include <cmath>
+#include "entity.h"
+#include "actionWait.h"
+#include "actionQueue.h"
 
 Entity::Entity(const std::string &className,
     JSONObject properties)
@@ -7,6 +9,7 @@ Entity::Entity(const std::string &className,
   this->className = className;
   this->properties = properties;
   position = sf::Vector2f(0, 0);
+  action = new ActionWait(this);
 }
 
 Entity::Entity(const Entity &that) {
@@ -15,9 +18,11 @@ Entity::Entity(const Entity &that) {
   properties = that.properties;
   texture = that.texture;
   position = sf::Vector2f(0, 0);
+  action = new ActionWait(this);
 }
 
 Entity::~Entity() {
+  delete action;
 }
 
 void Entity::setMap(Map *map) {
@@ -61,9 +66,7 @@ bool Entity::occupyTile(const sf::Vector2i &coord) {
 }
 
 void Entity::paint(sf::RenderTarget *target, sf::Color color) {
-  const JSONArray &rectVect = properties.find(L"spriteRect")->second->AsArray();
-  sf::IntRect spriteRect(rectVect[0]->AsNumber(), rectVect[1]->AsNumber(),
-            rectVect[2]->AsNumber(), rectVect[3]->AsNumber());
+  sf::IntRect spriteRect = action->getSpriteRect(properties);
   sf::Sprite sprite(*texture, spriteRect);
 
   sprite.setPosition((sf::Vector2f) map->mapToViewCoords(position));
@@ -71,4 +74,29 @@ void Entity::paint(sf::RenderTarget *target, sf::Color color) {
 }
 
 void Entity::update(sf::Time frametime) {
+  assert(action != NULL);
+  action->update(frametime);
+  if (action->isFinished()) {
+    delete action;
+    action = new ActionWait(this);
+  }
+}
+
+const Action &Entity::getAction() const {
+  return *action;
+}
+
+void Entity::setAction(const Action &a) {
+  delete action;
+  action = a.clone();
+  action->setOwner(this);
+}
+
+void Entity::queueAction(const Action &a) {
+  ActionQueue *queue = new ActionQueue(this);
+  queue->append(action);
+  Action *next_action = a.clone();
+  next_action->setOwner(this);
+  queue->append(next_action);
+  action = queue;
 }

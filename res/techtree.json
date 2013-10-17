@@ -2,7 +2,7 @@
   "units": {
     "worker": {
       "displayName": "Worker",
-      "spriteRect": [ 0, 97, 32, 32 ],
+      "spriteRect": [ 0, 130, 32, 35 ],
       "size": 1,
       "cost": {
         "gold": 40

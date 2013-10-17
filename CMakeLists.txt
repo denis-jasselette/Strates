@@ -39,6 +39,10 @@ add_library(Core
   src/imageManager.cpp
   src/screen.cpp
   src/ai.cpp
+  src/action.cpp
+  src/actionWait.cpp
+  src/actionQueue.cpp
+  src/actionMove.cpp
 )
 
 add_executable(strates

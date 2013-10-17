@@ -8,6 +8,7 @@
 #include "imageManager.h"
 #include "map.h"
 #include "clonable.h"
+#include "action.h"
 
 /**
  * This class is a base for any element buildable by a Player.
@@ -78,6 +79,10 @@ class Entity : public Clonable {
 
     virtual void update(sf::Time frametime);
 
+    const Action &getAction() const;
+    void setAction(const Action &a);
+    void queueAction(const Action &a);
+
     virtual void defaultAction(const Entity *target) { }// TODO: = 0;
     virtual void defaultAction(const sf::Vector2i &coords) = 0;
 
@@ -88,6 +93,7 @@ class Entity : public Clonable {
     JSONObject properties;
     sf::Vector2f position;
     const sf::Texture *texture;
+    Action *action;
 };
 
 #endif /* _ENTITY_H_ */

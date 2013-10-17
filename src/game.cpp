@@ -1,12 +1,13 @@
 #include <functional>
 #include <SFML/Window/Keyboard.hpp>
 #include <typeinfo>
+#include <exception>
 #include "config.h"
 #include "game.h"
 #include "utils.h"
 #include "mouseEvent.h"
 #include "ai.h"
-#include <exception>
+#include "actionMove.h"
 
 Game::Game(Application *app, Widget *parent) : Widget(parent) {
   this->app = app;
@@ -229,30 +230,34 @@ void Game::paintSelection(sf::RenderTarget *target) const {
 
     Unit *u = dynamic_cast<Unit*>((*it));
     sf::Vector2i lastPos = map->mapToViewCoords(mapPos + float(size) * sf::Vector2f(0.5, 0.5));
-    if (u != NULL) {    
-        std::list<sf::Vector2i> waypoints = u->getWaypoints();
-        std::list<sf::Vector2i>::iterator wit;
-        for(wit = waypoints.begin(); wit != waypoints.end(); wit++) {
-            sf::Vector2f tmpPos(wit->x, wit->y);
-            sf::Vector2i pos = map->mapToViewCoords(tmpPos);
-            sf::CircleShape circle((rect.width - 2)/2);
-            circle.setPosition(pos.x, pos.y);
-            circle.setFillColor(sf::Color::Transparent);
-            circle.setOutlineColor(sf::Color::Green);
-            circle.setOutlineThickness(1);
-            target->draw(circle);
-            sf::Vector2i newPos = map->mapToViewCoords(tmpPos + float(size) * sf::Vector2f(0.5, 0.5));
-            sf::Vertex line[] = {
-                sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y)),
-                sf::Vertex(sf::Vector2f(newPos.x, newPos.y))
-            };
-            line[0].color = sf::Color::Green;
-            line[1].color = sf::Color::Green;
-            target->draw(line, 2, sf::Lines);
-            lastPos = newPos;            
-        }
-    }
+    if (u == NULL)
+      continue;
 
+    const ActionMove *move = dynamic_cast<const ActionMove*>(&(u->getAction()));
+    if (move == NULL)
+      continue;
+
+    std::list<sf::Vector2i> waypoints = move->getWaypoints();
+    std::list<sf::Vector2i>::iterator wit;
+    for(wit = waypoints.begin(); wit != waypoints.end(); wit++) {
+        sf::Vector2f tmpPos(wit->x, wit->y);
+        sf::Vector2i pos = map->mapToViewCoords(tmpPos);
+        sf::CircleShape circle((rect.width - 2)/2);
+        circle.setPosition(pos.x, pos.y);
+        circle.setFillColor(sf::Color::Transparent);
+        circle.setOutlineColor(sf::Color::Green);
+        circle.setOutlineThickness(1);
+        target->draw(circle);
+        sf::Vector2i newPos = map->mapToViewCoords(tmpPos + float(size) * sf::Vector2f(0.5, 0.5));
+        sf::Vertex line[] = {
+            sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y)),
+            sf::Vertex(sf::Vector2f(newPos.x, newPos.y))
+        };
+        line[0].color = sf::Color::Green;
+        line[1].color = sf::Color::Green;
+        target->draw(line, 2, sf::Lines);
+        lastPos = newPos;            
+    }
   }
 }
 

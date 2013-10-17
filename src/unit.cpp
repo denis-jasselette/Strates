@@ -1,7 +1,5 @@
-#include <cmath>
 #include "unit.h"
-#include "utils.h"
-#include "ai.h"
+#include "actionMove.h"
 
 Unit::Unit(const std::string &className,
     JSONObject properties) :
@@ -9,36 +7,7 @@ Unit::Unit(const std::string &className,
 {
 }
 
-void Unit::update(sf::Time frametime) {
-  float delta = frametime.asSeconds();
-  
-  if (!waypoints.empty()) {
-      destination = waypoints.front();
-      if (approx(position, sf::Vector2f(destination))) {
-	position = sf::Vector2f(destination);
-	if (!waypoints.empty())
-	  waypoints.pop_front();
-      } else {
-	float speed = getProperty(L"speed")->AsNumber();
-	sf::Vector2f dir(sf::Vector2f(destination) - position);
-	sf::Vector2f normalized_dir = dir / norm(dir);
-	position += (speed * delta) * normalized_dir;
-      }
-  }
-}
-
 void Unit::defaultAction(const sf::Vector2i &coords) {
-  AI::getInstance().computePath(this, coords);
-}
-
-void Unit::addWaypoint(const sf::Vector2i &tileCoords) {
-  waypoints.push_back(tileCoords);
-}
-
-void Unit::clearWaypoints() {
-  waypoints.clear();
-}
-
-std::list<sf::Vector2i> Unit::getWaypoints() {
-  return waypoints;
+  ActionMove a(this, coords);
+  setAction(a);
 }

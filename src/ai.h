@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "unit.h"
+#include "actionMove.h"
 
 class AI {
  public:
@@ -13,7 +14,7 @@ class AI {
   }
 
   void init(Game *game);
-  void computePath(Unit *e, const sf::Vector2i &coords);
+  void computePath(Unit *e, const sf::Vector2i &coords, ActionMove *action);
   void prepareAccMap(std::vector<Entity*> &exclude);
  private:
   AI();

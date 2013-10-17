@@ -1,4 +1,3 @@
-#include "ai.h"
 #include <iostream>
 #include <map>
 #include <cmath>
@@ -6,6 +5,7 @@
 #include <stack>
 #include <algorithm>
 #include <set>
+#include "ai.h"
 
 enum Dir {
   NONE = 0,
@@ -107,7 +107,7 @@ double dist(Node &a, Node &b) {
   return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
-void addWaypoints(Node *goal, Unit *ent) {
+void addWaypoints(Node *goal, ActionMove *action) {
   std::stack<Node*> stack;
   Node* cur = goal;
   while(cur != NULL) {
@@ -115,7 +115,7 @@ void addWaypoints(Node *goal, Unit *ent) {
     cur = cur->prev;
   }
   
-  ent->clearWaypoints();
+  action->clearWaypoints();
   //Delete the start point
   stack.pop();
   Node* prev = stack.top();
@@ -125,13 +125,13 @@ void addWaypoints(Node *goal, Unit *ent) {
     Dir dir = prev->getDir(*n);
     stack.pop();
     if  (dir != lastDir) {
-      ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
+      action->addWaypoint(sf::Vector2i(prev->x, prev->y));
     }
     lastDir = dir;
     prev = n;
   }
   
-  ent->addWaypoint(sf::Vector2i(prev->x, prev->y));
+  action->addWaypoint(sf::Vector2i(prev->x, prev->y));
 }
 
 std::vector<Node*> getNeighbors(Map *m, std::vector<Node*> &nodeMap, std::vector<bool> &accMap, Node &n) {
@@ -210,7 +210,7 @@ void AI::prepareAccMap(std::vector<Entity*> &exclude) {
   }
 }
 
-void AI::computePath(Unit *e, const sf::Vector2i &coords) {
+void AI::computePath(Unit *e, const sf::Vector2i &coords, ActionMove *action) {
   //Compute an accessibility map
   Map* map = game->getMap(); 
   
@@ -255,7 +255,7 @@ void AI::computePath(Unit *e, const sf::Vector2i &coords) {
     
     Node* current = queue.top();
     if (*current == *goal) {
-      addWaypoints(goal, e);
+      addWaypoints(goal, action);
       break;
     }
 
