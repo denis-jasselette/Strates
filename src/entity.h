@@ -66,9 +66,13 @@ class Entity : public Clonable {
 
     void setTexture(const sf::Texture *texture);
 
-    const JSONValue *getProperty(const std::wstring &name);
+    const JSONValue *getProperty(const std::wstring &name) const;
+
+    sf::IntRect getSelectionRect() const;
 
     bool occupyTile(const sf::Vector2i &coord);
+
+    sf::Vector2i centerSprite(sf::IntRect sprite, sf::IntRect selection) const;
 
     /**
      * Paints this Entity on a RenderTarget

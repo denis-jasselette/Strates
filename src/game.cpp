@@ -199,11 +199,7 @@ void Game::paintSelection(sf::RenderTarget *target) const {
    
     std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
     for (it = candidates.begin(); it != candidates.end(); it++) {
-      int size = (*it)->getProperty(L"size")->AsNumber();
-      sf::Vector2f mapPos = (*it)->getPosition();
-      sf::IntRect rect = map->mapToViewRect(mapPos);
-      rect.width *= size;
-      rect.height *= size;
+      sf::IntRect rect = (*it)->getSelectionRect();
       sf::Vector2f rect_size(rect.width - 2, rect.height - 2);
       sf::RectangleShape shape(rect_size);
       shape.setPosition(rect.left + 1, rect.top + 1);

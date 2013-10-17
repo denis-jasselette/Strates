@@ -45,8 +45,8 @@ void Entity::setTexture(const sf::Texture *texture) {
   this->texture = texture;
 }
 
-const JSONValue *Entity::getProperty(const std::wstring &name) {
-  JSONObject::iterator it = properties.find(name);
+const JSONValue *Entity::getProperty(const std::wstring &name) const {
+  JSONObject::const_iterator it = properties.find(name);
   if (it == properties.end()) {
     std::stringstream ss;
     ss << "Property not found '" << std::string(name.begin(), name.end()) << "' for class '" << className << "'";
@@ -54,6 +54,15 @@ const JSONValue *Entity::getProperty(const std::wstring &name) {
   }
 
   return it->second;
+}
+
+sf::IntRect Entity::getSelectionRect() const {
+  int size = getProperty(L"size")->AsNumber();
+  sf::Vector2f mapPos = getPosition();
+  sf::IntRect rect = map->mapToViewRect(mapPos);
+  rect.width *= size;
+  rect.height *= size;
+  return rect;
 }
 
 bool Entity::occupyTile(const sf::Vector2i &coord) {
@@ -65,11 +74,19 @@ bool Entity::occupyTile(const sf::Vector2i &coord) {
   return tileRect.intersects(entityRect);  
 }
 
+sf::Vector2i Entity::centerSprite(sf::IntRect sprite, sf::IntRect selection) const {
+  sf::Vector2i view_pos = map->mapToViewCoords(position);
+  view_pos.x -= (sprite.width - selection.width) / 2;
+  view_pos.y -= (sprite.height - selection.height) / 2;
+  return view_pos;
+}
+
 void Entity::paint(sf::RenderTarget *target, sf::Color color) {
   sf::IntRect spriteRect = action->getSpriteRect(properties);
   sf::Sprite sprite(*texture, spriteRect);
 
-  sprite.setPosition((sf::Vector2f) map->mapToViewCoords(position));
+  sf::Vector2i view_pos = centerSprite(spriteRect, getSelectionRect());
+  sprite.setPosition((sf::Vector2f) view_pos);
   target->draw(sprite);
 }
 
