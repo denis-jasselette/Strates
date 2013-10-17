@@ -264,11 +264,11 @@ void Game::paintSelection(sf::RenderTarget *target) const {
 void Game::paint(sf::RenderTarget *target) {
   map->paint(target);
 
+  paintSelection(target);
   std::vector<Player*>::iterator it;
   for (it = players.begin(); it != players.end(); it++)
     (*it)->paint(target);
 
-  paintSelection(target);
   focusedPlayer->paintFoW(target);
 }
 
