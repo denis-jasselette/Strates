@@ -77,8 +77,10 @@ void Entity::update(sf::Time frametime) {
   assert(action != NULL);
   action->update(frametime);
   if (action->isFinished()) {
-    delete action;
+    /* Delete action last so that the object always has a valid action. */
+    Action *old_action = action;
     action = new ActionWait(this);
+    delete old_action;
   }
 }
 
@@ -87,9 +89,12 @@ const Action &Entity::getAction() const {
 }
 
 void Entity::setAction(const Action &a) {
-  delete action;
-  action = a.clone();
-  action->setOwner(this);
+  /* Delete action last so that the object always has a valid action. */
+  Action *new_action = a.clone();
+  new_action->setOwner(this);
+  Action *old_action = action;
+  action = new_action;
+  delete old_action;
 }
 
 void Entity::queueAction(const Action &a) {
