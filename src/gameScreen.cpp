@@ -8,11 +8,13 @@ GameScreen::GameScreen(Application *app) :
   Screen(app),
   hud(app->getImgMgr())
 {
+  focus = true;
   game = new Game(app, this);
   AI::getInstance().init(game);
 }
 
 void GameScreen::onEvent(sf::Event &evt) {
+  /* Handle events that don't require focus */
   switch (evt.type) {
     case sf::Event::Closed:
       log("Closed");
@@ -21,6 +23,22 @@ void GameScreen::onEvent(sf::Event &evt) {
     case sf::Event::Resized:
       log("Resized");
       onResized(evt);
+      break;
+    case sf::Event::GainedFocus:
+      log("GainedFocus");
+      focus = true;
+      break;
+    default:
+      /* Ignore all other events */
+      if (!focus)
+        return;
+  }
+
+  /* Handle events that require focus */
+  switch (evt.type) {
+    case sf::Event::LostFocus:
+      log("LostFocus");
+      focus = false;
       break;
     case sf::Event::KeyReleased:
       log("KeyReleased");
@@ -74,7 +92,7 @@ void GameScreen::exit() {
   nextScreen = SCREEN_EXIT;
 }
 
-void GameScreen::update() {
+void GameScreen::scroll() {
   const int SCROLL_AREA_SIZE = 5;
   const float SCROLL_SPEED = 12;
 
@@ -111,6 +129,11 @@ void GameScreen::update() {
   rect = game->getMap()->clampViewRect(rect);
   viewSetRect(view, rect);
   window.setView(view);
+}
+
+void GameScreen::update() {
+  if (focus)
+    scroll();
 
   game->update();
   repaint();

@@ -21,6 +21,7 @@ class GameScreen : public Screen {
     ScreenID run();
 
   private:
+    bool focus;
     Game *game;
     Hud hud;
     ScreenID nextScreen;
@@ -28,6 +29,7 @@ class GameScreen : public Screen {
     void onEvent(sf::Event &evt);
     void exit();
     void tick(sf::RenderTarget *target);
+    void scroll();
     void update();
     void paintDebug(sf::RenderTarget *target);
     void paint(sf::RenderTarget *target);
