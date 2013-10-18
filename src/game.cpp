@@ -186,17 +186,6 @@ sf::IntRect Game::getSelectionRect() const {
 void Game::paintSelection(sf::RenderTarget *target) const {
   std::vector<Entity*>::const_iterator it;
   if(selectionEnabled) {
-    sf::IntRect sel_rect = getSelectionRect();
-    sf::Vector2f rect_size(sel_rect.width, sel_rect.height);
-    sf::Vector2f rect_pos(sel_rect.left, sel_rect.top);
-	
-    sf::RectangleShape shape(rect_size);
-    shape.setPosition(rect_pos.x, rect_pos.y);
-    shape.setFillColor(sf::Color::Transparent);
-    shape.setOutlineColor(sf::Color::Green);
-    shape.setOutlineThickness(1);
-    target->draw(shape);
-   
     std::vector<Entity*> candidates = findEntityIn(getSelectionRect(), focusedPlayer);
     for (it = candidates.begin(); it != candidates.end(); it++) {
       sf::IntRect rect = (*it)->getSelectionRect();
@@ -257,6 +246,21 @@ void Game::paintSelection(sf::RenderTarget *target) const {
   }
 }
 
+void Game::paintSelectionBox(sf::RenderTarget *target) const {
+  if(selectionEnabled) {
+    sf::IntRect sel_rect = getSelectionRect();
+    sf::Vector2f rect_size(sel_rect.width, sel_rect.height);
+    sf::Vector2f rect_pos(sel_rect.left, sel_rect.top);
+
+    sf::RectangleShape shape(rect_size);
+    shape.setPosition(rect_pos.x, rect_pos.y);
+    shape.setFillColor(sf::Color::Transparent);
+    shape.setOutlineColor(sf::Color::Green);
+    shape.setOutlineThickness(1);
+    target->draw(shape);
+  }
+}
+
 void Game::paint(sf::RenderTarget *target) {
   map->paint(target);
 
@@ -266,6 +270,7 @@ void Game::paint(sf::RenderTarget *target) {
     (*it)->paint(target);
 
   focusedPlayer->paintFoW(target);
+  paintSelectionBox(target);
 }
 
 int Game::getRadius() {
