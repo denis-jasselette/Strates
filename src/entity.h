@@ -79,7 +79,7 @@ class Entity : public Clonable {
      *
      * @param target    the destination RenderTarget
      */
-    void paint(sf::RenderTarget *target, sf::Color color);
+    void paint(sf::RenderTarget *target);
 
     virtual void update(sf::Time frametime);
 

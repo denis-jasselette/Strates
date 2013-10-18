@@ -18,8 +18,8 @@ Game::Game(Application *app, Widget *parent) : Widget(parent) {
   fogTileMap = new TileMap("fow", app->getImgMgr());
   selectionEnabled = false;
 
-  players.push_back(new Player("Raymond", techTree, map, fogTileMap, sf::Color::Red, app->getImgMgr()));
-  players.push_back(new Player("Jean-Pierre", techTree, map, fogTileMap, sf::Color::Blue, app->getImgMgr()));
+  players.push_back(new Player("Raymond", techTree, map, fogTileMap, PlayerColor::Red, app->getImgMgr()));
+  players.push_back(new Player("Jean-Pierre", techTree, map, fogTileMap, PlayerColor::Blue, app->getImgMgr()));
 
   focusedPlayer = players[0];
 

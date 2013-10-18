@@ -43,6 +43,7 @@ add_library(Core
   src/actionWait.cpp
   src/actionQueue.cpp
   src/actionMove.cpp
+  src/playerColor.cpp
 )
 
 add_executable(strates

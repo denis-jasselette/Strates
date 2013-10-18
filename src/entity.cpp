@@ -81,7 +81,7 @@ sf::Vector2i Entity::centerSprite(sf::IntRect sprite, sf::IntRect selection) con
   return view_pos;
 }
 
-void Entity::paint(sf::RenderTarget *target, sf::Color color) {
+void Entity::paint(sf::RenderTarget *target) {
   sf::IntRect spriteRect = action->getSpriteRect(properties);
   sf::Sprite sprite(*texture, spriteRect);
 

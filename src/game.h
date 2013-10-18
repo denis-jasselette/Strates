@@ -7,6 +7,7 @@
 #include "techTree.h"
 #include "map.h"
 #include "player.h"
+#include "playerColor.h"
 #include "tileMap.h"
 
 /**
