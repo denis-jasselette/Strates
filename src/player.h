@@ -8,6 +8,7 @@
 #include "entity.h"
 #include "fow.h"
 #include "playerColor.h"
+#include "spriteManager.h"
 
 /**
  * Handles the units and buildings of a player.
@@ -21,7 +22,8 @@ class Player {
      * @param techTree    a pointer to the TechTree
      * @param map         a pointer to the Map
      */
-    Player(std::string name, TechTree *techTree, Map *map, TileMap *fogTileMap, const PlayerColor &color, ImageManager *imgMgr);
+    Player(std::string name, TechTree *techTree, Map *map, TileMap *fogTileMap,
+        const PlayerColor &color, ImageManager *imgMgr);
 
     /**
      * Destructor.
@@ -53,6 +55,8 @@ class Player {
      */
     void update(sf::Time frametime);
 
+    const sf::Texture *getTexture(const std::string &className);
+
     /**
      * Paints the Entity's on a RenderTarget.
      *
@@ -67,11 +71,8 @@ class Player {
     TechTree *techTree;
     Map *map;
     FoW *fog, *foglight;
-    const PlayerColor &color;
-    sf::Texture *sprite_sheet;
+    SpriteManager *spriteManager;
     std::vector<Entity*> entities;
-
-    void loadSpriteSheet(ImageManager *imgMgr);
 };
 
 #endif /* _PLAYER_H_ */

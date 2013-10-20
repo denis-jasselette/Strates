@@ -1,5 +1,6 @@
 #include <cmath>
 #include "entity.h"
+#include "player.h"
 #include "actionWait.h"
 #include "actionQueue.h"
 
@@ -10,6 +11,7 @@ Entity::Entity(const std::string &className,
   this->properties = properties;
   position = sf::Vector2f(0, 0);
   action = new ActionWait(this);
+  owner = NULL;
 }
 
 Entity::Entity(const Entity &that) {
@@ -19,10 +21,20 @@ Entity::Entity(const Entity &that) {
   texture = that.texture;
   position = sf::Vector2f(0, 0);
   action = new ActionWait(this);
+  owner = that.owner;
 }
 
 Entity::~Entity() {
   delete action;
+}
+
+void Entity::setOwner(Player *p) {
+  owner = p;
+  texture = NULL;
+}
+
+Player *Entity::getOwner() const {
+  return owner;
 }
 
 void Entity::setMap(Map *map) {
@@ -39,10 +51,6 @@ sf::Vector2i Entity::getTilePosition() const {
 
 void Entity::setPosition(const sf::Vector2f &position) {
   this->position = position;
-}
-
-void Entity::setTexture(const sf::Texture *texture) {
-  this->texture = texture;
 }
 
 const JSONValue *Entity::getProperty(const std::wstring &name) const {
@@ -82,6 +90,9 @@ sf::Vector2i Entity::centerSprite(sf::IntRect sprite, sf::IntRect selection) con
 }
 
 void Entity::paint(sf::RenderTarget *target) {
+  if (texture == NULL)
+    texture = owner->getTexture(className);
+
   sf::IntRect spriteRect = action->getSpriteRect(properties);
   sf::Sprite sprite(*texture, spriteRect);
 

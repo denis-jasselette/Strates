@@ -44,6 +44,7 @@ add_library(Core
   src/actionQueue.cpp
   src/actionMove.cpp
   src/playerColor.cpp
+  src/spriteManager.cpp
 )
 
 add_executable(strates

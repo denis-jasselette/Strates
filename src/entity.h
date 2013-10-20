@@ -10,6 +10,8 @@
 #include "clonable.h"
 #include "action.h"
 
+class Player;
+
 /**
  * This class is a base for any element buildable by a Player.
  */
@@ -41,6 +43,9 @@ class Entity : public Clonable {
 
     virtual Entity *clone() const = 0;
 
+    void setOwner(Player *p);
+    Player *getOwner() const;
+
     /**
      * Returns the position of this Entity on the Map.
      *
@@ -63,8 +68,6 @@ class Entity : public Clonable {
      * @param map    the Map
      */
     void setMap(Map *map);
-
-    void setTexture(const sf::Texture *texture);
 
     const JSONValue *getProperty(const std::wstring &name) const;
 
@@ -93,7 +96,7 @@ class Entity : public Clonable {
   protected:
     Map *map;
     std::string className;
-    //TODO: reference the owner player
+    Player *owner;
     JSONObject properties;
     sf::Vector2f position;
     const sf::Texture *texture;

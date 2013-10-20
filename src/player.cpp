@@ -1,14 +1,13 @@
 #include <iostream>
 #include "player.h"
 
-Player::Player(std::string name, TechTree *techTree, Map *map, TileMap *fogTileMap, const PlayerColor &color, ImageManager *imgMgr)
-  :
-    color(color)
+Player::Player(std::string name, TechTree *techTree, Map *map,
+    TileMap *fogTileMap, const PlayerColor &color, ImageManager *imgMgr)
 {
   this->name = name;
   this->techTree = techTree;
   this->map = map;
-  loadSpriteSheet(imgMgr);
+  spriteManager = new SpriteManager(imgMgr, color);
 
   fog = new FoW(map, fogTileMap);
   foglight = new FoW(map, fogTileMap, FoW::LIGHT);
@@ -24,14 +23,9 @@ Player::~Player() {
   for (it = entities.begin(); it != entities.end(); it++)
     delete *it;
 
-  delete sprite_sheet;
+  delete spriteManager;
   delete fog;
   delete foglight;
-}
-
-void Player::loadSpriteSheet(ImageManager *imgMgr) {
-  sprite_sheet = new sf::Texture(*imgMgr->get("entities"));
-  color.apply(sprite_sheet);
 }
 
 void Player::addEntity(std::string className, sf::Vector2i pos) {
@@ -41,7 +35,7 @@ void Player::addEntity(std::string className, sf::Vector2i pos) {
 void Player::addEntity(Entity *ent, sf::Vector2i pos) {
   ent->setMap(map);
   ent->setPosition(sf::Vector2f(pos));
-  ent->setTexture(sprite_sheet);
+  ent->setOwner(this);
   entities.push_back(ent);
 }
 
@@ -66,6 +60,10 @@ void Player::update(sf::Time frametime) {
       }
     }
   }
+}
+
+const sf::Texture *Player::getTexture(const std::string &className) {
+  return spriteManager->get(className);
 }
 
 void Player::paint(sf::RenderTarget *target) {
