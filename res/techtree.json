@@ -1,8 +1,12 @@
 {
   "units": {
-    "worker": {
-      "displayName": "Worker",
-      "spriteRect": [ 0, 130, 32, 35 ],
+    "peasant": {
+      "displayName": "Peasant",
+      "sprite": {
+        "size": [ 72, 72 ],
+        "movingRect": [ 0, 72, 360, 288 ],
+        "waitingRect": [ 0, 0, 360, 72 ]
+      },
       "size": 1,
       "cost": {
         "gold": 40
@@ -13,9 +17,13 @@
       "visibility": 4,
       "speed": 2
     },
-    "infantry": {
-      "displayName": "Infantry",
-      "spriteRect": [ 33, 97, 32, 32 ],
+    "footman": {
+      "displayName": "Footman",
+      "sprite": {
+        "size": [ 72, 72 ],
+        "movingRect": [ 0, 72, 360, 288 ],
+        "waitingRect": [ 0, 0, 360, 72 ]
+      },
       "size": 1,
       "cost": {
         "gold": 60
@@ -26,9 +34,13 @@
       "visibility": 3,
       "speed": 1.5
     },
-    "archer": {
-      "displayName": "Archer",
-      "spriteRect": [ 66, 97, 32, 32 ],
+    "elven_archer": {
+      "displayName": "Elven Archer",
+      "sprite": {
+        "size": [ 72, 72 ],
+        "movingRect": [ 0, 72, 360, 288 ],
+        "waitingRect": [ 0, 0, 360, 72 ]
+      },
       "size": 1,
       "cost": {
         "gold": 40,
@@ -39,14 +51,17 @@
       "range": 4,
       "visibility": 4,
       "speed": 1.5,
-      "requires": [ "forge" ]
+      "requires": [ "blacksmith" ]
     }
   },
   "buildings": {
-    "forum": {
-      "displayName": "City Hall",
-      "spriteRect": [ 0, 0, 96, 96 ],
-      "size": 3,
+    "town_hall": {
+      "displayName": "Town Hall",
+      "sprite": {
+        "size": [ 128, 128 ],
+        "waitingRect": [ 0, 0, 128, 128 ]
+      },
+      "size": 4,
       "cost": {
         "gold": 1000,
         "wood": 1000
@@ -56,7 +71,10 @@
     },
     "barracks": {
       "displayName": "Barracks",
-      "spriteRect": [ 97, 0, 96, 96 ],
+      "sprite": {
+        "size": [ 96, 96 ],
+        "waitingRect": [ 0, 0, 96, 96 ]
+      },
       "size": 3,
       "cost": {
         "gold": 300,
@@ -65,9 +83,12 @@
       "hp": 600,
       "visibility": 5
     },
-    "forge": {
-      "displayName": "Forge",
-      "spriteRect": [ 194, 0, 96, 96 ],
+    "blacksmith": {
+      "displayName": "Blacksmith",
+      "sprite": {
+        "size": [ 96, 96 ],
+        "waitingRect": [ 0, 0, 96, 96 ]
+      },
       "size": 3,
       "cost": {
         "gold": 200,

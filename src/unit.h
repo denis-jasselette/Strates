@@ -26,6 +26,11 @@ class Unit : public Entity {
     }
 
     virtual void defaultAction(const sf::Vector2i &coords);
+
+  private:
+    virtual std::string getTexturePath() const {
+      return "units/" + className;
+    }
 };
 
 #endif /* _UNIT_H_ */

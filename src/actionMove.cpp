@@ -55,7 +55,7 @@ std::list<sf::Vector2i> ActionMove::getWaypoints() const {
 }
 
 std::wstring ActionMove::getSpriteRectPropName() const {
-  return L"spriteRect";
+  return L"movingRect";
 }
 
 sf::IntRect ActionMove::getAnimSpriteRect() const {
@@ -63,9 +63,9 @@ sf::IntRect ActionMove::getAnimSpriteRect() const {
    * The animation part should probably be split into a class of its own, with
    * several ways to increment the state (random anim, linear, with
    * pauses...). */
-  int width = 32;
-  int height = 35;
-  int anim_seq[] = { 1, 2, 1, 3, 4, 3 };
+  int width = 72;
+  int height = 72;
+  int anim_seq[] = { 1, 0, 1, 3, 2, 3 };
   int sprite = anim_seq[anim_state];
-  return sf::IntRect(sprite * width, 0, width, height);
+  return sf::IntRect(0, sprite * height, width, height);
 }

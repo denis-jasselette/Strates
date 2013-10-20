@@ -11,9 +11,9 @@ bool ActionWait::isFinished() const {
 }
 
 std::wstring ActionWait::getSpriteRectPropName() const {
-  return L"spriteRect";
+  return L"waitingRect";
 }
 
 sf::IntRect ActionWait::getAnimSpriteRect() const {
-  return sf::IntRect(0, 0, 32, 35);
+  return sf::IntRect(0, 0, 72, 72);
 }

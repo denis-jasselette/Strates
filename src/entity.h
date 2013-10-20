@@ -101,6 +101,8 @@ class Entity : public Clonable {
     sf::Vector2f position;
     const sf::Texture *texture;
     Action *action;
+
+    virtual std::string getTexturePath() const = 0;
 };
 
 #endif /* _ENTITY_H_ */

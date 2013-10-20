@@ -91,7 +91,7 @@ sf::Vector2i Entity::centerSprite(sf::IntRect sprite, sf::IntRect selection) con
 
 void Entity::paint(sf::RenderTarget *target) {
   if (texture == NULL)
-    texture = owner->getTexture(className);
+    texture = owner->getTexture(getTexturePath());
 
   sf::IntRect spriteRect = action->getSpriteRect(properties);
   sf::Sprite sprite(*texture, spriteRect);

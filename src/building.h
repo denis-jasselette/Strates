@@ -26,6 +26,11 @@ class Building : public Entity {
     }
 
     virtual void defaultAction(const sf::Vector2i &coords);
+
+  private:
+    virtual std::string getTexturePath() const {
+      return "buildings/" + className;
+    }
 };
 
 #endif /* _BUILDING_H_ */

@@ -5,7 +5,7 @@ int red_components[] = { 0xa40000, 0x7c0000, 0x5c0400, 0x440400 };
 const PlayerColor PlayerColor::Red(red_components);
 int blue_components[] = { 0x0c48cc, 0x0428a0, 0x001474, 0x00044c };
 const PlayerColor PlayerColor::Blue(blue_components);
-const PlayerColor PlayerColor::Mask = Blue;
+const PlayerColor PlayerColor::Mask = Red;
 
 PlayerColor::PlayerColor(int shades[]) {
   for (int s = 0; s < nb_shades; s++) {

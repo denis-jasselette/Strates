@@ -13,8 +13,8 @@ Player::Player(std::string name, TechTree *techTree, Map *map,
   foglight = new FoW(map, fogTileMap, FoW::LIGHT);
 
   static int move = 0;
-  addEntity("worker", sf::Vector2i(3 + move, 5 + move));
-  addEntity("forum", sf::Vector2i(5 + move, 4 + move));
+  addEntity("peasant", sf::Vector2i(3 + move, 5 + move));
+  addEntity("town_hall", sf::Vector2i(5 + move, 4 + move));
   move += 10;
 }
 
