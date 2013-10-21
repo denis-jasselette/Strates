@@ -40,7 +40,7 @@ bool Game::onMousePressed(const Event &evt) {
   sf::Vector2i coords = app->mapPixelToCoords(pos);
   
   if(e.getButton() == MouseEvent::BUTTON3) {
-    focusedPlayer->addEntity("worker", map->viewToMapCoords(coords));
+    focusedPlayer->addEntity("peasant", map->viewToMapCoords(coords));
   }
   
   selectionAction(evt);

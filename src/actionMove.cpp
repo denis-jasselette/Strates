@@ -12,6 +12,21 @@ ActionMove::ActionMove(Entity *owner, const sf::Vector2i &coords)
   anim_next_state_wait = 0;
   anim_state = -1;
   anim_seq_len = 6;
+  orientation = 0;
+}
+
+void ActionMove::updateOrientation(const sf::Vector2f dir) {
+  if (approx(dir.x, 0.0)) {
+    if (dir.y <= 0)
+      orientation = 0;
+    else
+      orientation = 4;
+  } else {
+    double angle = fastArcTan(dir.y / dir.x);
+    orientation = int((5 * M_PI / 8 + angle) / M_PI_4);
+    if (dir.x < 0)
+      orientation = 4 - orientation;
+  }
 }
 
 void ActionMove::update(sf::Time frametime) {
@@ -33,6 +48,7 @@ void ActionMove::update(sf::Time frametime) {
 	float speed = owner->getProperty(L"speed")->AsNumber();
 	sf::Vector2f dir(sf::Vector2f(destination) - owner->getPosition());
 	sf::Vector2f normalized_dir = dir / norm(dir);
+        updateOrientation(normalized_dir);
 	owner->setPosition(owner->getPosition() + (speed * delta) * normalized_dir);
       }
   }
@@ -67,5 +83,5 @@ sf::IntRect ActionMove::getAnimSpriteRect() const {
   int height = 72;
   int anim_seq[] = { 1, 0, 1, 3, 2, 3 };
   int sprite = anim_seq[anim_state];
-  return sf::IntRect(0, sprite * height, width, height);
+  return sf::IntRect(orientation * width, sprite * height, width, height);
 }

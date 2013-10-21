@@ -28,6 +28,9 @@ protected:
   float anim_next_state_wait;
   int anim_state;
   int anim_seq_len;
+  int orientation;
+
+  void updateOrientation(const sf::Vector2f dir);
 
 private:
   virtual std::wstring getSpriteRectPropName() const;
