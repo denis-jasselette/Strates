@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.23)
 
 project(Strates)
 include(CheckIncludeFiles)
 
-find_package(SFML 2 REQUIRED system window graphics network)
+find_package(SFML 2.5.1 COMPONENTS system window graphics network REQUIRED)
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})
 endif()
@@ -51,7 +51,7 @@ add_executable(strates
   src/main.cpp
 )
 
-TARGET_LINK_LIBRARIES(strates Core Json ${SFML_WINDOW_LIBRARY} ${SFML_GRAPHICS_LIBRARY} ${SFML_SYSTEM_LIBRARY})
+TARGET_LINK_LIBRARIES(strates Core Json sfml-window sfml-graphics sfml-system)
 
 # Generate the Doxygen documentation if Doxygen is present
 find_package(Doxygen)
